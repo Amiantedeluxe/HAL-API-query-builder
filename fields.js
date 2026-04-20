@@ -5,7 +5,7 @@ const OPERATORS_BY_TYPE = {
     { id: "is_not",      label: "n'est pas",      arity: 1 },
     { id: "starts_with", label: "commence par",   arity: 1 },
   ],
- _t: [
+  _t: [
     { id: "contains",    label: "contient",       arity: 1 },
     { id: "is",          label: "est exactement", arity: 1 },
     { id: "is_not",      label: "n'est pas",      arity: 1 },
