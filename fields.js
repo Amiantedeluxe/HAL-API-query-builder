@@ -25,14 +25,22 @@ const OPERATORS_BY_TYPE = {
 };
 
 const FIELDS = [
-  { name: "authFullName_s",        label: "Auteur",               type: "_s"     },
+  { name: "authFullName_t",        label: "Auteur",               type: "_s"     },
   { name: "collection_t",            label: "Collection",           type: "_s"     },
   { name: "doiId_id",              label: "DOI",                  type: "_id"    },
   { name: "publicationDateY_i",    label: "Année de publication", type: "_i"     },
   { name: "publicationDate_tdate", label: "Date de publication",  type: "_tdate" },
-  { name: "docType_s",            label: "Type de document",    type: "_s", options: undefined },
+  { name: "docType_s",            label: "Type de document",    type: "_s", options: [ 
+  { value: "ART", label: "Article de revue" },
+  { value: "COMM", label: "Communication dans un congrès" },
+  { value: "COUV", label: "Chapitre d'ouvrage" },
+  ]},
   { name: "primaryDomain_s",       label: "Discipline",    type: "_s", options: undefined },
-  { name: "submitType_s",         label: "Type de dépôt",  type: "_s", options: undefined },
+  { name: "submitType_s",         label: "Type de dépôt",  type: "_s", options: [ 
+  { value: "file", label: "avec fichier" },
+  { value: "notice", label: "notice" },
+  { value: "annex", label: "annexe" },
+  ]},
   { name: "language_s",           label: "Langue",        type: "_s",  options: [
   { value: "fr", label: "Français" },
   { value: "en", label: "Anglais" },
