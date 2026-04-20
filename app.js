@@ -8,7 +8,6 @@ function createRule() {
   const op    = OPERATORS_BY_TYPE[field.type][0];
   return { type: "rule", id: uid(), field: field.name, operator: op.id, value: "", value2: "" };
 }
-
 function createGroup(bool = "AND") {
   return { type: "group", id: uid(), boolean: bool, children: [createRule()] };
 }
@@ -16,24 +15,24 @@ function createGroup(bool = "AND") {
 // Mode : "search" | "doc"
 let appMode = "search";
 
-// Bloc 1 — Périmètre (fq)
-let fqGroups = [];
+// Bloc 1 — Recherche textuelle (q)
+let qText  = "";
+let qScope = "all"; // "all" | "title_s" | "abstract_s" | "keyword_s"
 
-// Bloc 2 — Recherche (q)
-let qGroup = createGroup("AND");
-let qEnabled = false; // false = q=* (tous les documents)
+// Bloc 2 — Périmètre (fq)
+let fqGroups = [];
 
 // Bloc 3 — Affichage
 let displayState = {
-  flMode:    "default",   // "default" | "all" | "pick"
-  flPicked:  [],          // noms de champs cochés
-  rows:      "30",
-  start:     "0",
-  wt:        "json",
-  indent:    true,
-  sortField: "",
-  sortDir:   "desc",
-  // Facettes
+  flMode:      "default", // "default" | "all" | "pick"
+  flPicked:    [],
+  rows:        "30",
+  countOnly:   false,
+  start:       "0",
+  wt:          "json",
+  indent:      true,
+  sortField:   "",
+  sortDir:     "desc",
   facetFields: [],
   facetSort:   "",
   facetLimit:  "",
@@ -49,83 +48,52 @@ let baseUrl = "https://api.archives-ouvertes.fr/search";
 
 function render() {
   if (appMode === "doc") {
-    renderDocMode();
+    document.getElementById("block-search").style.display = "none";
+    document.getElementById("block-doc").style.display    = "flex";
   } else {
-    renderSearchMode();
+    document.getElementById("block-search").style.display = "flex";
+    document.getElementById("block-doc").style.display    = "none";
+    renderFqSection();
+    renderDisplaySection();
   }
   updatePreview();
 }
 
-function renderSearchMode() {
-  document.getElementById("block-search").style.display = "flex";
-  document.getElementById("block-doc").style.display    = "none";
-
-  // Bloc 1 — Périmètre
-  renderFqSection();
-
-  // Bloc 2 — Recherche
-  renderQSection();
-
-  // Bloc 3 — Affichage
-  renderDisplaySection();
-}
-
-function renderDocMode() {
-  document.getElementById("block-search").style.display = "none";
-  document.getElementById("block-doc").style.display    = "flex";
-}
-
-// ─── Bloc 1 : Périmètre (fq) ─────────────────────────────────────────────────
+// ─── Bloc 2 : Périmètre (fq) ─────────────────────────────────────────────────
 
 function renderFqSection() {
   const container = document.getElementById("fq-list");
   const empty     = document.getElementById("fq-empty");
   container.innerHTML = "";
-
   if (fqGroups.length === 0) {
     empty.style.display = "flex";
   } else {
     empty.style.display = "none";
-    fqGroups.forEach(g => {
-      container.appendChild(renderGroup(g, true, "fq"));
-    });
-  }
-}
-
-// ─── Bloc 2 : Recherche (q) ───────────────────────────────────────────────────
-
-function renderQSection() {
-  const toggle  = document.getElementById("q-toggle");
-  const body    = document.getElementById("q-body");
-  const allNote = document.getElementById("q-all-note");
-
-  toggle.checked = qEnabled;
-
-  if (qEnabled) {
-    body.style.display    = "block";
-    allNote.style.display = "none";
-    const container = document.getElementById("q-builder");
-    container.innerHTML = "";
-    container.appendChild(renderGroup(qGroup, true, "q"));
-  } else {
-    body.style.display    = "none";
-    allNote.style.display = "flex";
+    fqGroups.forEach(g => container.appendChild(renderGroup(g, true, "fq")));
   }
 }
 
 // ─── Bloc 3 : Affichage ───────────────────────────────────────────────────────
 
 function renderDisplaySection() {
-  // fl mode radios
+  // fl radios
   document.querySelectorAll('input[name="fl-mode"]').forEach(r => {
     r.checked = (r.value === displayState.flMode);
   });
-
   const pickArea = document.getElementById("fl-pick-area");
   pickArea.style.display = displayState.flMode === "pick" ? "block" : "none";
+  if (displayState.flMode === "pick") renderFlCheckboxes();
 
-  if (displayState.flMode === "pick") {
-    renderFlCheckboxes();
+  // rows / countOnly
+  const rowsInput  = document.getElementById("rows-input");
+  const countBtn   = document.getElementById("count-only-btn");
+  if (displayState.countOnly) {
+    rowsInput.value    = "0";
+    rowsInput.disabled = true;
+    countBtn.classList.add("btn--active");
+  } else {
+    rowsInput.disabled = false;
+    countBtn.classList.remove("btn--active");
   }
 }
 
@@ -139,17 +107,13 @@ function renderFlCheckboxes() {
     cb.value   = f.name;
     cb.checked = displayState.flPicked.includes(f.name);
     cb.onchange = () => {
-      if (cb.checked) {
-        if (!displayState.flPicked.includes(f.name)) displayState.flPicked.push(f.name);
-      } else {
-        displayState.flPicked = displayState.flPicked.filter(n => n !== f.name);
-      }
+      if (cb.checked) { if (!displayState.flPicked.includes(f.name)) displayState.flPicked.push(f.name); }
+      else { displayState.flPicked = displayState.flPicked.filter(n => n !== f.name); }
       updatePreview();
     };
     label.appendChild(cb);
     label.appendChild(document.createTextNode(" " + f.label));
-    const tech = el("span", "fl-field-tech");
-    tech.textContent = f.name;
+    const tech = el("span", "fl-field-tech"); tech.textContent = f.name;
     label.appendChild(tech);
     grid.appendChild(label);
   });
@@ -165,16 +129,12 @@ function renderGroup(group, isRoot, context) {
 
   if (!isRoot) {
     const removeBtn = iconBtn("×", "btn btn--ghost btn--icon", "Supprimer ce groupe");
-    removeBtn.onclick = () => {
-      if (context === "q") removeNodeFrom(qGroup, group.id);
-      else fqGroups.forEach(g => removeNodeFrom(g, group.id));
-      render();
-    };
+    removeBtn.onclick = () => { fqGroups.forEach(g => removeNodeFrom(g, group.id)); render(); };
     header.appendChild(removeBtn);
   }
 
   const lbl = el("span", "group__label");
-  lbl.textContent = isRoot ? (context === "fq" ? "Filtre" : "Conditions") : "Groupe";
+  lbl.textContent = isRoot ? "Filtre" : "Groupe";
   header.appendChild(lbl);
 
   const boolSel = el("div", "bool-selector");
@@ -186,9 +146,9 @@ function renderGroup(group, isRoot, context) {
   });
   header.appendChild(boolSel);
 
-  if (isRoot && context === "fq") {
+  if (isRoot) {
     const delFq = el("button", "btn btn--remove-fq btn--sm");
-    delFq.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg> Supprimer ce filtre`;
+    delFq.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg> Supprimer`;
     delFq.onclick = () => { fqGroups = fqGroups.filter(g => g.id !== group.id); render(); };
     header.appendChild(delFq);
   }
@@ -197,9 +157,7 @@ function renderGroup(group, isRoot, context) {
 
   const body = el("div", "group__body");
   group.children.forEach(child => {
-    body.appendChild(child.type === "rule"
-      ? renderRule(child, group, context)
-      : renderGroup(child, false, context));
+    body.appendChild(child.type === "rule" ? renderRule(child) : renderGroup(child, false, context));
   });
   wrap.appendChild(body);
 
@@ -218,7 +176,7 @@ function renderGroup(group, isRoot, context) {
   return wrap;
 }
 
-function renderRule(rule, parentGroup, context) {
+function renderRule(rule) {
   const row = el("div", "rule");
 
   const fieldSel = el("select", "rule__select rule__field");
@@ -257,18 +215,13 @@ function renderRule(rule, parentGroup, context) {
   }
 
   const del = iconBtn("×", "btn btn--ghost btn--icon rule__delete", "Supprimer");
-  del.onclick = () => {
-    if (context === "q") removeNodeFrom(qGroup, rule.id);
-    else fqGroups.forEach(g => removeNodeFrom(g, rule.id));
-    render();
-  };
+  del.onclick = () => { fqGroups.forEach(g => removeNodeFrom(g, rule.id)); render(); };
   row.appendChild(del);
   return row;
 }
 
 function renderValueInput(rule, key, fieldType) {
   const field = getField(rule.field);
-
   if (field && field.options) {
     const select = el("select", "rule__select");
     const blank  = document.createElement("option");
@@ -283,19 +236,14 @@ function renderValueInput(rule, key, fieldType) {
     select.onchange = () => { rule[key] = select.value; updatePreview(); };
     return select;
   }
-
   let input;
   if (fieldType === "_tdate") {
-    input = el("input", "rule__input rule__input--date");
-    input.type = "date";
+    input = el("input", "rule__input rule__input--date"); input.type = "date";
   } else if (fieldType === "_i") {
-    input = el("input", "rule__input rule__input--number");
-    input.type = "number";
+    input = el("input", "rule__input rule__input--number"); input.type = "number";
     input.placeholder = key === "value2" ? "jusqu'à" : "valeur";
   } else {
-    input = el("input", "rule__input");
-    input.type = "text";
-    input.placeholder = "valeur…";
+    input = el("input", "rule__input"); input.type = "text"; input.placeholder = "valeur…";
   }
   input.value = rule[key] || "";
   input.oninput = () => { rule[key] = input.value; updatePreview(); };
@@ -309,18 +257,17 @@ function updatePreview() {
 
   if (appMode === "doc") {
     const id = docId.trim();
+    const base = baseUrl.trim().replace(/\/$/, "");
     if (!id) {
       readable = "(entrez un identifiant de document)";
       encoded  = "#";
     } else {
-      const base = baseUrl.trim().replace(/\/$/, "");
       encoded  = `${base}/?q=docid:${encodeURIComponent(id)}&fl=*`;
       readable = `${base}/?\n  q=docid:${id}\n  &fl=*`;
     }
   } else {
-    // Construire params depuis displayState
     const params = {
-      rows:      displayState.rows,
+      rows:      displayState.countOnly ? "0" : displayState.rows,
       wt:        displayState.wt,
       indent:    displayState.indent,
       start:     displayState.start,
@@ -328,15 +275,9 @@ function updatePreview() {
       sortDir:   displayState.sortDir,
       fl:        buildFl(),
     };
-    const facets = {
-      fields: displayState.facetFields,
-      sort:   displayState.facetSort,
-      limit:  displayState.facetLimit,
-    };
-    // q effectif
-    const effectiveQ = qEnabled ? qGroup : { type: "group", id: "root", boolean: "AND", children: [] };
-    readable = buildHALUrlReadable(baseUrl, effectiveQ, fqGroups, params, facets);
-    encoded  = buildHALUrl(baseUrl, effectiveQ, fqGroups, params, facets);
+    const facets = { fields: displayState.facetFields, sort: displayState.facetSort, limit: displayState.facetLimit };
+    readable = buildHALUrlReadable(baseUrl, qText, qScope, fqGroups, params, facets);
+    encoded  = buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets);
   }
 
   document.getElementById("url-output").textContent = readable;
@@ -346,24 +287,23 @@ function updatePreview() {
 function buildFl() {
   if (displayState.flMode === "all")  return "*";
   if (displayState.flMode === "pick") return displayState.flPicked.join(",");
-  return ""; // default → pas de fl
+  return "";
 }
 
 // ─── Copy ─────────────────────────────────────────────────────────────────────
 
 function copyUrl() {
-  let encoded;
+  const params = { rows: displayState.countOnly ? "0" : displayState.rows, wt: displayState.wt, indent: displayState.indent, start: displayState.start, sortField: displayState.sortField, sortDir: displayState.sortDir, fl: buildFl() };
+  const facets = { fields: displayState.facetFields, sort: displayState.facetSort, limit: displayState.facetLimit };
+  let url;
   if (appMode === "doc") {
     const id = docId.trim();
-    encoded = id ? `${baseUrl.trim().replace(/\/$/, "")}/?q=docid:${encodeURIComponent(id)}&fl=*` : "";
+    url = id ? `${baseUrl.trim().replace(/\/$/, "")}/?q=docid:${encodeURIComponent(id)}&fl=*` : "";
   } else {
-    const params = { rows: displayState.rows, wt: displayState.wt, indent: displayState.indent, start: displayState.start, sortField: displayState.sortField, sortDir: displayState.sortDir, fl: buildFl() };
-    const facets = { fields: displayState.facetFields, sort: displayState.facetSort, limit: displayState.facetLimit };
-    const effectiveQ = qEnabled ? qGroup : { type: "group", id: "root", boolean: "AND", children: [] };
-    encoded = buildHALUrl(baseUrl, effectiveQ, fqGroups, params, facets);
+    url = buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets);
   }
-  if (!encoded || encoded === "#") return;
-  navigator.clipboard.writeText(encoded).then(() => {
+  if (!url || url === "#") return;
+  navigator.clipboard.writeText(url).then(() => {
     const btn = document.getElementById("copy-btn");
     btn.textContent = "Copié !";
     setTimeout(() => { btn.textContent = "Copier"; }, 2000);
@@ -374,99 +314,36 @@ function copyUrl() {
 
 function resetAll() {
   appMode      = "search";
+  qText        = ""; qScope = "all";
   fqGroups     = [];
-  qGroup       = createGroup("AND");
-  qEnabled     = false;
-  displayState = { flMode: "default", flPicked: [], rows: "30", start: "0", wt: "json", indent: true, sortField: "", sortDir: "desc", facetFields: [], facetSort: "", facetLimit: "" };
+  displayState = { flMode: "default", flPicked: [], rows: "30", countOnly: false, start: "0", wt: "json", indent: true, sortField: "", sortDir: "desc", facetFields: [], facetSort: "", facetLimit: "" };
   docId        = "";
 
-  document.getElementById("mode-search").checked  = true;
-  document.getElementById("q-toggle").checked     = false;
-  document.getElementById("rows-input").value     = "30";
-  document.getElementById("start-input").value    = "0";
-  document.getElementById("wt-select").value      = "json";
-  document.getElementById("indent-check").checked = true;
-  document.getElementById("sort-field").value     = "";
-  document.getElementById("sort-dir").value       = "desc";
-  document.getElementById("doc-id-input").value   = "";
+  document.getElementById("mode-search").checked   = true;
+  document.getElementById("q-text-input").value    = "";
+  document.getElementById("q-scope-select").value  = "all";
+  document.getElementById("rows-input").value      = "30";
+  document.getElementById("rows-input").disabled   = false;
+  document.getElementById("start-input").value     = "0";
+  document.getElementById("wt-select").value       = "json";
+  document.getElementById("indent-check").checked  = true;
+  document.getElementById("sort-field").value      = "";
+  document.getElementById("sort-dir").value        = "desc";
+  document.getElementById("doc-id-input").value    = "";
   document.getElementById("facet-fields-list").innerHTML = "";
-  document.getElementById("facet-sort").value    = "";
-  document.getElementById("facet-limit").value   = "";
+  document.getElementById("facet-sort").value      = "";
+  document.getElementById("facet-limit").value     = "";
   render();
 }
 
 // ─── Utilitaires DOM ──────────────────────────────────────────────────────────
 
-function el(tag, cls) {
-  const e = document.createElement(tag);
-  if (cls) e.className = cls;
-  return e;
-}
-function iconBtn(label, cls, title) {
-  const b = el("button", cls);
-  b.textContent = label; b.title = title;
-  return b;
-}
+function el(tag, cls) { const e = document.createElement(tag); if (cls) e.className = cls; return e; }
+function iconBtn(label, cls, title) { const b = el("button", cls); b.textContent = label; b.title = title; return b; }
 function removeNodeFrom(group, id) {
   group.children = group.children.filter(c => c.id !== id);
   group.children.forEach(c => { if (c.type === "group") removeNodeFrom(c, id); });
 }
-
-// ─── Init ─────────────────────────────────────────────────────────────────────
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  // Mode switch
-  document.getElementById("mode-search").onchange = () => { appMode = "search"; render(); };
-  document.getElementById("mode-doc").onchange    = () => { appMode = "doc";    render(); };
-
-  // Base URL
-  document.getElementById("input-base-url").oninput = e => { baseUrl = e.target.value; updatePreview(); };
-
-  // Bloc 1 — ajouter un filtre
-  document.getElementById("add-fq-btn").onclick = () => { fqGroups.push(createGroup("AND")); render(); };
-
-  // Bloc 2 — toggle q
-  document.getElementById("q-toggle").onchange = e => { qEnabled = e.target.checked; render(); };
-
-  // Bloc 3 — fl mode
-  document.querySelectorAll('input[name="fl-mode"]').forEach(r => {
-    r.onchange = () => { displayState.flMode = r.value; renderDisplaySection(); updatePreview(); };
-  });
-
-  // Bloc 3 — rows / start / wt / indent / sort
-  const bindDisplay = (id, key) => {
-    const input = document.getElementById(id);
-    input.addEventListener("input",  () => { displayState[key] = input.type === "checkbox" ? input.checked : input.value; updatePreview(); });
-    input.addEventListener("change", () => { displayState[key] = input.type === "checkbox" ? input.checked : input.value; updatePreview(); });
-  };
-  bindDisplay("rows-input",    "rows");
-  bindDisplay("start-input",   "start");
-  bindDisplay("wt-select",     "wt");
-  bindDisplay("indent-check",  "indent");
-  bindDisplay("sort-field",    "sortField");
-  bindDisplay("sort-dir",      "sortDir");
-
-  // Bloc 3 — facettes
-  document.getElementById("add-facet-btn").onclick = () => {
-    displayState.facetFields.push("");
-    renderFacetList();
-    updatePreview();
-  };
-  document.getElementById("facet-sort").onchange  = e => { displayState.facetSort  = e.target.value; updatePreview(); };
-  document.getElementById("facet-limit").oninput  = e => { displayState.facetLimit = e.target.value; updatePreview(); };
-
-  // Mode doc — identifiant
-  document.getElementById("doc-id-input").oninput = e => { docId = e.target.value; updatePreview(); };
-
-  // Boutons globaux
-  document.getElementById("copy-btn").onclick  = copyUrl;
-  document.getElementById("reset-btn").onclick = resetAll;
-
-  render();
-});
-
-// ─── Facette list (appelé depuis init + add) ──────────────────────────────────
 
 function renderFacetList() {
   const list = document.getElementById("facet-fields-list");
@@ -474,8 +351,7 @@ function renderFacetList() {
   displayState.facetFields.forEach((val, idx) => {
     const row   = el("div", "facet-row");
     const input = el("input", "rule__input facet-field-input");
-    input.type = "text"; input.placeholder = "ex: docType_s";
-    input.value = val;
+    input.type = "text"; input.placeholder = "ex: docType_s"; input.value = val;
     input.setAttribute("list", "facet-suggestions");
     input.oninput = () => { displayState.facetFields[idx] = input.value; updatePreview(); };
     row.appendChild(input);
@@ -485,3 +361,75 @@ function renderFacetList() {
     list.appendChild(row);
   });
 }
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Mode
+  document.getElementById("mode-search").onchange = () => { appMode = "search"; render(); };
+  document.getElementById("mode-doc").onchange    = () => { appMode = "doc";    render(); };
+
+  // Base URL
+  document.getElementById("input-base-url").oninput = e => { baseUrl = e.target.value; updatePreview(); };
+
+  // Bloc 1 — recherche textuelle
+  document.getElementById("q-text-input").oninput  = e => { qText  = e.target.value; updatePreview(); };
+  document.getElementById("q-scope-select").onchange = e => { qScope = e.target.value; updatePreview(); };
+
+  // Bloc 2 — ajouter un filtre
+  document.getElementById("add-fq-btn").onclick = () => { fqGroups.push(createGroup("AND")); render(); };
+
+  // Bloc 3 — fl mode
+  document.querySelectorAll('input[name="fl-mode"]').forEach(r => {
+    r.onchange = () => { displayState.flMode = r.value; renderDisplaySection(); updatePreview(); };
+  });
+
+  // Bloc 3 — rows + count-only
+  document.getElementById("rows-input").addEventListener("input", e => {
+    displayState.rows = e.target.value;
+    displayState.countOnly = false;
+    document.getElementById("count-only-btn").classList.remove("btn--active");
+    updatePreview();
+  });
+  document.getElementById("count-only-btn").onclick = () => {
+    displayState.countOnly = !displayState.countOnly;
+    renderDisplaySection();
+    updatePreview();
+  };
+
+  // Bloc 3 — autres params
+  const bind = (id, key) => {
+    const input = document.getElementById(id);
+    const ev = input.type === "checkbox" ? "change" : "input";
+    input.addEventListener(ev, () => {
+      displayState[key] = input.type === "checkbox" ? input.checked : input.value;
+      updatePreview();
+    });
+    input.addEventListener("change", () => {
+      displayState[key] = input.type === "checkbox" ? input.checked : input.value;
+      updatePreview();
+    });
+  };
+  bind("start-input",   "start");
+  bind("wt-select",     "wt");
+  bind("indent-check",  "indent");
+  bind("sort-field",    "sortField");
+  bind("sort-dir",      "sortDir");
+
+  // Facettes
+  document.getElementById("add-facet-btn").onclick = () => {
+    displayState.facetFields.push(""); renderFacetList(); updatePreview();
+  };
+  document.getElementById("facet-sort").onchange = e  => { displayState.facetSort  = e.target.value; updatePreview(); };
+  document.getElementById("facet-limit").oninput = e  => { displayState.facetLimit = e.target.value; updatePreview(); };
+
+  // Doc mode
+  document.getElementById("doc-id-input").oninput = e => { docId = e.target.value; updatePreview(); };
+
+  // Boutons globaux
+  document.getElementById("copy-btn").onclick  = copyUrl;
+  document.getElementById("reset-btn").onclick = resetAll;
+
+  render();
+});
