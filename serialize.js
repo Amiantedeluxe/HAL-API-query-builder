@@ -17,6 +17,7 @@ function serializeRule(rule) {
   const v  = rule.value.trim();
   const v2 = (rule.value2 || "").trim();
 
+  // _s et _t : même syntaxe Lucene
   if (type === "_s" || type === "_t") {
     if (rule.operator === "contains")    return v.includes(" ") ? `${name}:"${escapeString(v)}"` : `${name}:*${escapeString(v)}*`;
     if (rule.operator === "is")          return `${name}:"${escapeString(v)}"`;
@@ -60,26 +61,36 @@ function serializeNode(node) {
   return node.type === "rule" ? serializeRule(node) : serializeGroup(node);
 }
 
+// ─── Sérialisation recherche textuelle libre (q=) ────────────────────────────
+
+// fieldScope : "all" | "title_s" | "abstract_s" | "keyword_s"
+function serializeFreetextQ(text, fieldScope) {
+  const t = text.trim();
+  if (!t) return "*:*";
+
+  // Plusieurs mots → on les entoure de parenthèses pour le champ
+  const val = t.includes(" ") ? `(${t})` : t;
+
+  if (fieldScope === "all") return val;
+  return `${fieldScope}:${val}`;
+}
+
 // ─── Construction de l'URL complète ──────────────────────────────────────────
 
-function buildHALUrl(baseUrl, qGroup, fqGroups, params, facets) {
+function buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets) {
   const parts = [];
 
-  // q=
-  const q = serializeNode(qGroup).trim();
-  parts.push(`q=${encodeURIComponent(q || "*:*")}`);
+  parts.push(`q=${encodeURIComponent(serializeFreetextQ(qText, qScope))}`);
 
-  // fq= (un paramètre par filtre non-vide)
   fqGroups.forEach(fqGroup => {
     const fq = serializeNode(fqGroup).trim();
     if (fq) parts.push(`fq=${encodeURIComponent(fq)}`);
   });
 
-  // Paramètres globaux
   if (params.rows !== "" && params.rows !== undefined) parts.push(`rows=${params.rows}`);
   if (params.wt)     parts.push(`wt=${params.wt}`);
   if (params.indent) parts.push(`indent=true`);
-  if (params.start && params.start !== "0")  parts.push(`start=${params.start}`);
+  if (params.start && params.start !== "0") parts.push(`start=${params.start}`);
   if (params.sortField && params.sortDir) {
     parts.push(`sort=${encodeURIComponent(params.sortField.trim() + " " + params.sortDir)}`);
   }
@@ -87,7 +98,6 @@ function buildHALUrl(baseUrl, qGroup, fqGroups, params, facets) {
     parts.push(`fl=${encodeURIComponent(params.fl.trim())}`);
   }
 
-  // Facettes
   const activeFacets = (facets.fields || []).filter(f => f.trim());
   if (activeFacets.length > 0) {
     parts.push("facet=true");
@@ -100,13 +110,10 @@ function buildHALUrl(baseUrl, qGroup, fqGroups, params, facets) {
   return `${base}/?${parts.join("&")}`;
 }
 
-// ─── Version lisible (non encodée) pour l'aperçu ─────────────────────────────
-
-function buildHALUrlReadable(baseUrl, qGroup, fqGroups, params, facets) {
+function buildHALUrlReadable(baseUrl, qText, qScope, fqGroups, params, facets) {
   const parts = [];
 
-  const q = serializeNode(qGroup).trim();
-  parts.push(`q=${q || "*:*"}`);
+  parts.push(`q=${serializeFreetextQ(qText, qScope)}`);
 
   fqGroups.forEach(fqGroup => {
     const fq = serializeNode(fqGroup).trim();
@@ -116,7 +123,7 @@ function buildHALUrlReadable(baseUrl, qGroup, fqGroups, params, facets) {
   if (params.rows !== "" && params.rows !== undefined) parts.push(`rows=${params.rows}`);
   if (params.wt)     parts.push(`wt=${params.wt}`);
   if (params.indent) parts.push(`indent=true`);
-  if (params.start && params.start !== "0")  parts.push(`start=${params.start}`);
+  if (params.start && params.start !== "0") parts.push(`start=${params.start}`);
   if (params.sortField && params.sortDir) {
     parts.push(`sort=${params.sortField.trim()} ${params.sortDir}`);
   }
