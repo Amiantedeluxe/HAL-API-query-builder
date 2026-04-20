@@ -17,7 +17,7 @@ function serializeRule(rule) {
   const v  = rule.value.trim();
   const v2 = (rule.value2 || "").trim();
 
-  if (type === "_s") {
+  if (type === "_s" || type === "_t") {
     if (rule.operator === "contains")    return v.includes(" ") ? `${name}:"${escapeString(v)}"` : `${name}:*${escapeString(v)}*`;
     if (rule.operator === "is")          return `${name}:"${escapeString(v)}"`;
     if (rule.operator === "is_not")      return `NOT ${name}:"${escapeString(v)}"`;
