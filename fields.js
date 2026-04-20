@@ -5,6 +5,12 @@ const OPERATORS_BY_TYPE = {
     { id: "is_not",      label: "n'est pas",      arity: 1 },
     { id: "starts_with", label: "commence par",   arity: 1 },
   ],
+ _t: [
+    { id: "contains",    label: "contient",       arity: 1 },
+    { id: "is",          label: "est exactement", arity: 1 },
+    { id: "is_not",      label: "n'est pas",      arity: 1 },
+    { id: "starts_with", label: "commence par",   arity: 1 },
+  ],
   _i: [
     { id: "eq",      label: "=",      arity: 1 },
     { id: "neq",     label: "≠",      arity: 1 },
@@ -26,7 +32,7 @@ const OPERATORS_BY_TYPE = {
 
 const FIELDS = [
   { name: "authFullName_s",        label: "Auteur",               type: "_s"     },
-  { name: "collName_s",            label: "Collection",           type: "_s"     },
+  { name: "collection_t",            label: "Collection",           type: "_t"     },
   { name: "doiId_id",              label: "DOI",                  type: "_id"    },
   { name: "publicationDateY_i",    label: "Année de publication", type: "_i"     },
   { name: "publicationDate_tdate", label: "Date de publication",  type: "_tdate" },
