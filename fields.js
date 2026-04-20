@@ -53,7 +53,7 @@ const FIELDS = [
 // Champs disponibles pour les facettes (on peut en ajouter d'autres ici)
 const FACET_FIELD_SUGGESTIONS = [
   "authFullName_s",
-  "collName_s",
+  "collection_t",
   "docType_s",
   "primaryDomain_s",
   "publicationDateY_i",
