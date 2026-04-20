@@ -23,7 +23,6 @@
       --green:      #3fb950;
       --orange:     #f0883e;
       --purple:     #a371f7;
-      --yellow:     #e3b341;
       --radius:     5px;
       --radius-lg:  9px;
       --mono:       'IBM Plex Mono', monospace;
@@ -31,23 +30,19 @@
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 13px; }
-    body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 100px; }
+    body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 120px; }
 
     /* ── Header ── */
     .app-header {
       position: sticky; top: 0; z-index: 50;
-      background: rgba(13,17,23,.94);
-      backdrop-filter: blur(12px);
+      background: rgba(13,17,23,.94); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      height: 50px;
-      display: flex; align-items: center;
-      padding: 0 24px; gap: 14px;
+      height: 50px; display: flex; align-items: center; padding: 0 24px; gap: 14px;
     }
     .logo { font-family: var(--mono); font-size: .78rem; font-weight: 500; color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 3px 8px; }
-    .header-title { font-size: .85rem; font-weight: 500; flex: 1; }
     .header-sep { width: 1px; height: 18px; background: var(--border); }
+    .header-title { font-size: .85rem; font-weight: 500; flex: 1; }
 
-    /* Mode switcher */
     .mode-switcher { display: flex; gap: 2px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2px; }
     .mode-switcher label { display: flex; align-items: center; gap: 6px; font-size: .75rem; font-weight: 500; padding: 4px 12px; border-radius: 3px; cursor: pointer; color: var(--text-muted); transition: all .12s; user-select: none; }
     .mode-switcher input[type="radio"] { display: none; }
@@ -57,81 +52,48 @@
     .app-body { max-width: 820px; margin: 0 auto; padding: 24px 18px; display: flex; flex-direction: column; gap: 16px; }
 
     /* ── Base URL ── */
-    .base-url-row {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
-      padding: 9px 14px;
-    }
+    .base-url-row { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 9px 14px; }
     .base-url-row label { font-family: var(--mono); font-size: .7rem; color: var(--text-muted); white-space: nowrap; }
     .base-url-row input { flex: 1; font-family: var(--mono); font-size: .8rem; color: var(--text); background: transparent; border: none; outline: none; }
 
-    /* ── Block card ── */
-    .block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
-    .block-header {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface-2);
-    }
-    .block-number {
-      width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--mono); font-size: .72rem; font-weight: 600;
-      margin-top: 1px;
-    }
-    .block-number--1 { background: rgba(240,136,62,.15); color: var(--orange); border: 1px solid rgba(240,136,62,.4); }
-    .block-number--2 { background: rgba(88,166,255,.15); color: var(--accent); border: 1px solid rgba(88,166,255,.4); }
-    .block-number--3 { background: rgba(163,113,247,.15); color: var(--purple); border: 1px solid rgba(163,113,247,.4); }
+    /* ── Block ── */
+    .block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+    .block-header { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+    .block-number { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: .72rem; font-weight: 600; margin-top: 1px; }
+    .block-number--1 { background: rgba(88,166,255,.15);  color: var(--accent);  border: 1px solid rgba(88,166,255,.4); }
+    .block-number--2 { background: rgba(240,136,62,.15);  color: var(--orange);  border: 1px solid rgba(240,136,62,.4); }
+    .block-number--3 { background: rgba(163,113,247,.15); color: var(--purple);  border: 1px solid rgba(163,113,247,.4); }
     .block-titles { flex: 1; }
     .block-title { font-size: .9rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
     .block-sub { font-size: .75rem; color: var(--text-muted); line-height: 1.4; }
     .block-body { padding: 14px 16px; }
 
-    /* ── FQ empty state ── */
-    .fq-empty {
-      display: flex; align-items: center; gap: 10px;
-      padding: 12px 14px;
-      border: 1px dashed var(--border-2); border-radius: var(--radius);
-      color: var(--text-muted); font-size: .78rem;
+    /* ── Bloc 1 : recherche textuelle ── */
+    .q-search-row { display: flex; align-items: center; gap: 0; }
+    .q-text-input {
+      flex: 1; font-family: var(--sans); font-size: .9rem; color: var(--text);
+      background: var(--surface-3); border: 1px solid var(--border-2);
+      border-radius: var(--radius) 0 0 var(--radius);
+      padding: 9px 14px; outline: none; transition: border-color .12s;
     }
-    .fq-empty svg { flex-shrink: 0; opacity: .5; }
-    .fq-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
-    .fq-actions { margin-top: 10px; }
+    .q-text-input::placeholder { color: var(--text-dim); }
+    .q-text-input:focus { border-color: var(--accent); z-index: 1; }
+    .q-scope-select {
+      font-family: var(--sans); font-size: .82rem; color: var(--text);
+      background: var(--surface-2); border: 1px solid var(--border-2); border-left: none;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 9px 28px 9px 12px; outline: none; cursor: pointer; transition: border-color .12s;
+      appearance: none; min-width: 160px; flex-shrink: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236e7a9e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 9px center;
+      background-color: var(--surface-2);
+    }
+    .q-scope-select:focus { border-color: var(--accent); }
+    .q-hint { margin-top: 8px; font-size: .73rem; color: var(--text-dim); font-family: var(--mono); }
 
-    /* ── Q toggle ── */
-    .q-toggle-row {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 12px;
-    }
-    .toggle-switch { position: relative; width: 34px; height: 18px; flex-shrink: 0; }
-    .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .toggle-slider {
-      position: absolute; inset: 0; cursor: pointer;
-      background: var(--surface-3); border: 1px solid var(--border-2); border-radius: 18px;
-      transition: .15s;
-    }
-    .toggle-slider::before {
-      content: ''; position: absolute;
-      width: 12px; height: 12px; left: 2px; top: 2px;
-      background: var(--text-muted); border-radius: 50%;
-      transition: .15s;
-    }
-    .toggle-switch input:checked + .toggle-slider { background: var(--accent); border-color: var(--accent); }
-    .toggle-switch input:checked + .toggle-slider::before { background: #fff; transform: translateX(16px); }
-    .toggle-label { font-size: .82rem; color: var(--text-muted); cursor: pointer; user-select: none; }
-    .toggle-label strong { color: var(--text); }
-    .q-all-note {
-      display: flex; align-items: center; gap: 8px;
-      padding: 10px 14px; border-radius: var(--radius);
-      background: var(--surface-2); border: 1px solid var(--border);
-      font-size: .78rem; color: var(--text-muted); font-family: var(--mono);
-    }
-    .q-all-note .badge { background: rgba(63,185,80,.12); color: var(--green); border: 1px solid rgba(63,185,80,.3); font-size: .7rem; padding: 1px 7px; border-radius: 3px; font-family: var(--mono); }
+    /* ── Bloc 2 : fq ── */
+    .fq-empty { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px dashed var(--border-2); border-radius: var(--radius); color: var(--text-muted); font-size: .78rem; }
+    .fq-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
 
     /* ── Groups ── */
     .group { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); }
@@ -147,68 +109,58 @@
     .bool-btn--active { background: var(--accent); color: #fff; }
 
     .rule { display: flex; align-items: center; gap: 6px; padding: 0 12px; flex-wrap: wrap; }
-    .rule__select {
-      font-family: var(--sans); font-size: .82rem; color: var(--text);
-      background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 5px 26px 5px 9px; cursor: pointer; outline: none; transition: border-color .12s;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236e7a9e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 7px center;
-    }
+    .rule__select { font-family: var(--sans); font-size: .82rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 5px 26px 5px 9px; cursor: pointer; outline: none; transition: border-color .12s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236e7a9e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 7px center; }
     .rule__select:focus { border-color: var(--accent); }
-    .rule__field { min-width: 155px; }
-    .rule__operator { min-width: 120px; }
+    .rule__field { min-width: 155px; } .rule__operator { min-width: 120px; }
     .rule__input { font-family: var(--mono); font-size: .8rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 5px 9px; min-width: 130px; outline: none; transition: border-color .12s, box-shadow .12s; }
     .rule__input::placeholder { color: var(--text-dim); }
     .rule__input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
-    .rule__input--date { min-width: 148px; color-scheme: dark; }
-    .rule__input--number { min-width: 90px; }
+    .rule__input--date { min-width: 148px; color-scheme: dark; } .rule__input--number { min-width: 90px; }
     .rule__sep { font-size: .72rem; color: var(--text-muted); font-family: var(--mono); }
     .rule__delete { margin-left: auto; }
 
-    /* ── Display block ── */
-    .fl-modes { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+    /* ── Bloc 3 : affichage ── */
+    .fl-modes { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
     .fl-mode-option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: border-color .12s; }
     .fl-mode-option:has(input:checked) { border-color: var(--accent); background: var(--accent-dim); }
     .fl-mode-option input[type="radio"] { margin-top: 2px; accent-color: var(--accent); flex-shrink: 0; }
     .fl-mode-title { font-size: .82rem; font-weight: 500; color: var(--text); }
     .fl-mode-desc { font-size: .73rem; color: var(--text-muted); margin-top: 1px; }
-
-    .fl-pick-area { margin-top: 4px; }
+    .fl-pick-area { margin-bottom: 16px; }
     .fl-checkboxes { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px; }
-    .fl-checkbox-label {
-      display: flex; align-items: center; gap: 8px;
-      padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius);
-      cursor: pointer; font-size: .8rem; color: var(--text-muted); transition: all .12s;
-    }
+    .fl-checkbox-label { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; font-size: .8rem; color: var(--text-muted); transition: all .12s; }
     .fl-checkbox-label:has(input:checked) { border-color: var(--accent); color: var(--text); background: var(--accent-dim); }
     .fl-checkbox-label input { accent-color: var(--accent); flex-shrink: 0; }
     .fl-field-tech { font-family: var(--mono); font-size: .68rem; color: var(--text-dim); margin-left: auto; }
 
-    .display-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .display-params { padding-top: 14px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
+    .params-row { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
     .display-field { display: flex; flex-direction: column; gap: 5px; }
     .display-field label { font-family: var(--mono); font-size: .68rem; color: var(--text-muted); }
     .display-field input, .display-field select { font-family: var(--mono); font-size: .8rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 5px 9px; outline: none; transition: border-color .12s; }
     .display-field input:focus, .display-field select:focus { border-color: var(--accent); }
-    .display-field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236e7a9e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 7px center; padding-right: 24px; }
-    .display-field--full { grid-column: 1 / -1; }
-    .display-field-inline { display: flex; align-items: center; gap: 8px; padding-top: 18px; }
+    .display-field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236e7a9e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 7px center; padding-right: 24px; background-color: var(--bg); }
+    .display-field input[type="number"] { width: 90px; }
+    .display-field-inline { display: flex; align-items: center; gap: 7px; padding-bottom: 2px; }
     .display-field-inline input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px; cursor: pointer; }
-    .display-field-inline label { font-family: var(--mono); font-size: .78rem; color: var(--text-muted); cursor: pointer; }
+    .display-field-inline label { font-family: var(--mono); font-size: .78rem; color: var(--text-muted); cursor: pointer; white-space: nowrap; }
     .sort-row { display: flex; gap: 6px; }
-    .sort-row input { flex: 1; }
+    .sort-row input { width: 200px; }
 
-    /* Facettes dans Display */
+    /* Bouton "Juste le compte" */
+    .btn--active { background: var(--orange) !important; color: #0d1117 !important; border-color: var(--orange) !important; font-weight: 600; }
+
+    /* Facettes */
     .facet-section { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
-    .facet-section-title { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+    .facet-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .facet-label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); }
     .facet-fields-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
     .facet-row { display: flex; align-items: center; gap: 8px; }
-    .facet-field-input { min-width: 180px !important; flex: 1; }
+    .facet-field-input { min-width: 180px; flex: 1; }
     .facet-options-row { display: flex; gap: 10px; flex-wrap: wrap; }
     .facet-opt { min-width: 140px; }
 
     /* ── Doc mode ── */
-    .block-doc { display: none; flex-direction: column; gap: 0; }
     .doc-input-row { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
     .doc-input-row label { font-size: .82rem; color: var(--text-muted); white-space: nowrap; }
     .doc-input-row input { flex: 1; font-family: var(--mono); font-size: .85rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 7px 10px; outline: none; transition: border-color .12s; }
@@ -229,14 +181,10 @@
     .btn--danger { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
     .btn--danger:hover { border-color: var(--red); color: var(--red); background: rgba(255,107,107,.08); }
     .btn--remove-fq { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-size: .7rem; padding: 3px 8px; }
-    .btn--remove-fq:hover { border-color: var(--red); color: var(--red); background: rgba(255,107,107,.08); }
+    .btn--remove-fq:hover { border-color: var(--red); color: var(--red); }
 
-    /* ── URL Preview ── */
-    .preview {
-      position: sticky; bottom: 14px;
-      background: var(--surface); border: 1px solid var(--border-2); border-radius: var(--radius-lg);
-      overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,.5);
-    }
+    /* ── Preview ── */
+    .preview { position: sticky; bottom: 14px; background: var(--surface); border: 1px solid var(--border-2); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,.5); }
     .preview__header { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
     .preview__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); flex-shrink: 0; }
     .preview__title { font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--text-muted); flex: 1; }
@@ -250,7 +198,6 @@
   <span class="logo">HAL</span>
   <div class="header-sep"></div>
   <span class="header-title">Constructeur de requêtes API</span>
-
   <div class="mode-switcher">
     <input type="radio" name="app-mode" id="mode-search" value="search" checked />
     <label for="mode-search">
@@ -263,7 +210,6 @@
       Document par ID
     </label>
   </div>
-
   <button id="reset-btn" class="btn btn--danger btn--sm" style="margin-left:8px">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.36"/></svg>
     Réinitialiser
@@ -272,22 +218,44 @@
 
 <div class="app-body">
 
-  <!-- Base URL -->
   <div class="base-url-row">
     <label>Point d'entrée</label>
     <input id="input-base-url" type="text" value="https://api.archives-ouvertes.fr/search" spellcheck="false" />
   </div>
 
-  <!-- ══ MODE RECHERCHE ══════════════════════════════════════════════════════ -->
+  <!-- ══ MODE RECHERCHE ════════════════════════════════════════════════════ -->
   <div id="block-search" style="display:flex; flex-direction:column; gap:16px;">
 
-    <!-- Bloc 1 — Périmètre -->
+    <!-- Bloc 1 — Recherche textuelle -->
     <div class="block">
       <div class="block-header">
         <div class="block-number block-number--1">1</div>
         <div class="block-titles">
+          <div class="block-title">Qu'est-ce qu'on cherche ?</div>
+          <div class="block-sub">Recherche en texte libre. Laissez vide pour récupérer tous les documents.</div>
+        </div>
+      </div>
+      <div class="block-body">
+        <div class="q-search-row">
+          <input id="q-text-input" class="q-text-input" type="text" placeholder="Ex : machine learning, climat, Dupont…" spellcheck="false" />
+          <select id="q-scope-select" class="q-scope-select">
+            <option value="all">dans tous les champs</option>
+            <option value="title_s">dans le titre</option>
+            <option value="abstract_s">dans le résumé</option>
+            <option value="keyword_s">dans les mots-clés</option>
+          </select>
+        </div>
+        <div class="q-hint">Vide → <code style="color:var(--accent)">q=*</code> · tous les documents du périmètre</div>
+      </div>
+    </div>
+
+    <!-- Bloc 2 — Périmètre -->
+    <div class="block">
+      <div class="block-header">
+        <div class="block-number block-number--2">2</div>
+        <div class="block-titles">
           <div class="block-title">Dans quel périmètre ?</div>
-          <div class="block-sub">Définit les bornes fixes de votre recherche : une collection, une structure, un type de document… Équivaut au <code style="font-family:var(--mono);color:var(--orange)">fq=</code> dans l'URL.</div>
+          <div class="block-sub">Filtres structurels : collection, labo, type de document, langue… Laissez vide pour interroger toute la base HAL.</div>
         </div>
         <button id="add-fq-btn" class="btn btn--outline btn--sm">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -297,37 +265,8 @@
       <div class="block-body">
         <div id="fq-list" class="fq-list"></div>
         <div id="fq-empty" class="fq-empty">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Aucun filtre — la requête portera sur toute la base HAL. Cliquez sur « Ajouter un filtre » pour restreindre le périmètre.
-        </div>
-      </div>
-    </div>
-
-    <!-- Bloc 2 — Recherche -->
-    <div class="block">
-      <div class="block-header">
-        <div class="block-number block-number--2">2</div>
-        <div class="block-titles">
-          <div class="block-title">Qu'est-ce qu'on cherche ?</div>
-          <div class="block-sub">Critères de recherche textuelle dans le périmètre défini. Laissez désactivé pour récupérer tous les documents. Équivaut au <code style="font-family:var(--mono);color:var(--accent)">q=</code> dans l'URL.</div>
-        </div>
-      </div>
-      <div class="block-body">
-        <div class="q-toggle-row">
-          <label class="toggle-switch">
-            <input type="checkbox" id="q-toggle" />
-            <span class="toggle-slider"></span>
-          </label>
-          <label class="toggle-label" for="q-toggle">
-            <strong>Ajouter des critères de recherche</strong>
-          </label>
-        </div>
-        <div id="q-all-note" class="q-all-note">
-          <span class="badge">q=*</span>
-          Tous les documents du périmètre seront retournés.
-        </div>
-        <div id="q-body" style="display:none">
-          <div id="q-builder"></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Aucun filtre — toute la base HAL sera interrogée.
         </div>
       </div>
     </div>
@@ -338,7 +277,7 @@
         <div class="block-number block-number--3">3</div>
         <div class="block-titles">
           <div class="block-title">Qu'est-ce qu'on affiche ?</div>
-          <div class="block-sub">Choisissez les champs retournés, le nombre de résultats, le tri et les facettes.</div>
+          <div class="block-sub">Champs retournés, nombre de résultats, format, tri et facettes.</div>
         </div>
       </div>
       <div class="block-body">
@@ -349,14 +288,14 @@
             <input type="radio" name="fl-mode" value="default" checked />
             <div>
               <div class="fl-mode-title">Champs par défaut</div>
-              <div class="fl-mode-desc">HAL retourne un ensemble standard de champs. Pratique pour explorer.</div>
+              <div class="fl-mode-desc">HAL retourne un ensemble standard. Pratique pour explorer.</div>
             </div>
           </label>
           <label class="fl-mode-option">
             <input type="radio" name="fl-mode" value="all" />
             <div>
-              <div class="fl-mode-title">Tous les champs <code style="font-family:var(--mono);font-size:.72rem;color:var(--purple)">fl=*</code></div>
-              <div class="fl-mode-desc">Retourne toutes les métadonnées disponibles. Utile pour explorer un document.</div>
+              <div class="fl-mode-title">Tous les champs <code style="font-family:var(--mono);font-size:.7rem;color:var(--purple)">fl=*</code></div>
+              <div class="fl-mode-desc">Toutes les métadonnées disponibles. Utile pour explorer un corpus.</div>
             </div>
           </label>
           <label class="fl-mode-option">
@@ -368,45 +307,50 @@
           </label>
         </div>
 
-        <div id="fl-pick-area" style="display:none">
+        <div id="fl-pick-area" class="fl-pick-area" style="display:none">
           <div id="fl-checkboxes" class="fl-checkboxes"></div>
         </div>
 
-        <!-- Rows / pagination / format / tri -->
-        <div class="display-grid">
+        <!-- Params -->
+        <div class="display-params">
 
-          <div class="display-field">
-            <label>Nombre de résultats (rows)</label>
-            <input id="rows-input" type="number" value="30" min="0" max="10000" />
-          </div>
-
-          <div class="display-field">
-            <label>Format (wt)</label>
-            <select id="wt-select">
-              <option value="json" selected>JSON</option>
-              <option value="xml">XML</option>
-              <option value="csv">CSV</option>
-            </select>
-          </div>
-
-          <div class="display-field">
-            <label>Début (start)</label>
-            <input id="start-input" type="number" value="0" min="0" />
-          </div>
-
-          <div class="display-field-inline">
-            <input type="checkbox" id="indent-check" checked />
-            <label for="indent-check">Indenter (indent=true)</label>
-          </div>
-
-          <div class="display-field display-field--full">
-            <label>Trier par (sort)</label>
-            <div class="sort-row">
-              <input id="sort-field" type="text" placeholder="ex: publicationDate_tdate" list="field-suggestions" />
-              <select id="sort-dir">
-                <option value="desc">Décroissant</option>
-                <option value="asc">Croissant</option>
+          <div class="params-row">
+            <div class="display-field">
+              <label>Nombre de résultats</label>
+              <input id="rows-input" type="number" value="30" min="0" max="10000" />
+            </div>
+            <button id="count-only-btn" class="btn btn--outline btn--sm" title="Retourne uniquement le nombre total de résultats (rows=0)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Juste le compte
+            </button>
+            <div class="display-field">
+              <label>Décalage (start)</label>
+              <input id="start-input" type="number" value="0" min="0" />
+            </div>
+            <div class="display-field-inline" style="padding-bottom:4px">
+              <input type="checkbox" id="indent-check" checked />
+              <label for="indent-check">Indenter</label>
+            </div>
+            <div class="display-field">
+              <label>Format</label>
+              <select id="wt-select">
+                <option value="json" selected>JSON</option>
+                <option value="xml">XML</option>
+                <option value="csv">CSV</option>
               </select>
+            </div>
+          </div>
+
+          <div class="params-row">
+            <div class="display-field">
+              <label>Trier par</label>
+              <div class="sort-row">
+                <input id="sort-field" type="text" placeholder="ex: publicationDate_tdate" list="field-suggestions" />
+                <select id="sort-dir">
+                  <option value="desc">Décroissant</option>
+                  <option value="asc">Croissant</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -414,8 +358,8 @@
 
         <!-- Facettes -->
         <div class="facet-section">
-          <div class="facet-section-title">
-            Facettes
+          <div class="facet-header">
+            <span class="facet-label">Facettes</span>
             <button id="add-facet-btn" class="btn btn--outline btn--sm">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               Ajouter
@@ -427,13 +371,13 @@
               <label>facet.sort</label>
               <select id="facet-sort">
                 <option value="">— défaut —</option>
-                <option value="count">Par fréquence (count)</option>
-                <option value="index">Alphabétique (index)</option>
+                <option value="count">Par fréquence</option>
+                <option value="index">Alphabétique</option>
               </select>
             </div>
             <div class="display-field facet-opt">
               <label>facet.limit</label>
-              <input id="facet-limit" type="number" placeholder="— défaut —" min="1" />
+              <input id="facet-limit" type="number" placeholder="— défaut —" min="1" style="width:120px" />
             </div>
           </div>
         </div>
@@ -442,15 +386,15 @@
     </div>
 
   </div>
-  <!-- ══ FIN MODE RECHERCHE ═════════════════════════════════════════════════ -->
+  <!-- ══ FIN MODE RECHERCHE ════════════════════════════════════════════════ -->
 
   <!-- ══ MODE DOCUMENT ════════════════════════════════════════════════════ -->
-  <div id="block-doc" class="block">
+  <div id="block-doc" class="block" style="display:none; flex-direction:column;">
     <div class="block-header">
-      <div class="block-number block-number--2">ID</div>
+      <div class="block-number block-number--1">ID</div>
       <div class="block-titles">
         <div class="block-title">Récupérer un document par identifiant</div>
-        <div class="block-sub">Retourne toutes les métadonnées d'un document précis. Génère <code style="font-family:var(--mono);color:var(--accent)">q=docid:XXX&fl=*</code></div>
+        <div class="block-sub">Retourne toutes les métadonnées d'un document précis.</div>
       </div>
     </div>
     <div class="doc-input-row">
@@ -458,12 +402,12 @@
       <input id="doc-id-input" type="text" placeholder="ex: 2877234" spellcheck="false" />
     </div>
     <div class="doc-note">
-      Entrez le <code>docid</code> numérique du document HAL. L'URL générée retournera toutes les métadonnées disponibles (<code>fl=*</code>).
+      Entrez le <code>docid</code> numérique HAL. Génère <code>q=docid:XXX&fl=*</code> pour retourner toutes les métadonnées disponibles.
     </div>
   </div>
-  <!-- ══ FIN MODE DOCUMENT ═════════════════════════════════════════════════ -->
+  <!-- ══ FIN MODE DOCUMENT ════════════════════════════════════════════════ -->
 
-  <!-- URL Preview -->
+  <!-- Preview -->
   <div class="preview">
     <div class="preview__header">
       <div class="preview__dot"></div>
@@ -478,7 +422,6 @@
 
 </div>
 
-<!-- Datalists -->
 <datalist id="facet-suggestions">
   <option value="authFullName_s"><option value="collection_t"><option value="docType_s">
   <option value="primaryDomain_s"><option value="publicationDateY_i"><option value="submitType_s">
