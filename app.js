@@ -23,7 +23,7 @@ let qScope = "all"; // "all" | "title_s" | "abstract_s" | "keyword_s"
 let fqGroups = [];
 
 // Filtre domaine disciplinaire
-let domainFilter = { l0: "", l1: "" };
+let domainFilter = { l0: "", l1: "", l2: "" };
 
 // Bloc 3 — Affichage
 let displayState = {
@@ -360,7 +360,7 @@ function resetAll() {
   appMode      = "search";
   qText        = ""; qScope = "all";
   fqGroups     = [];
-  domainFilter = { l0: "", l1: "" };
+  domainFilter = { l0: "", l1: "", l2: "" };
   displayState = { flMode: "default", flPicked: [], rows: "30", countOnly: false, start: "0", wt: "json", indent: true, sortField: "", sortDir: "desc", facetFields: [], facetSort: "", facetLimit: "" };
   docId        = "";
 
@@ -431,10 +431,16 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   document.getElementById("domain-l1").onchange = e => {
     domainFilter.l1 = e.target.value;
+    domainFilter.l2 = "";
+    renderDomainFilter();
+    updatePreview();
+  };
+  document.getElementById("domain-l2").onchange = e => {
+    domainFilter.l2 = e.target.value;
     updatePreview();
   };
   document.getElementById("domain-clear").onclick = () => {
-    domainFilter = { l0: "", l1: "" };
+    domainFilter = { l0: "", l1: "", l2: "" };
     renderDomainFilter();
     updatePreview();
   };
