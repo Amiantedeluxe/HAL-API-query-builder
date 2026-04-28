@@ -207,7 +207,9 @@ function renderRule(rule) {
 
   const currentOp = ops.find(o => o.id === rule.operator);
   const fieldType = getField(rule.field).type;
+  if (currentOp && currentOp.arity >= 1) {
   row.appendChild(renderValueInput(rule, "value", fieldType));
+  }
   if (currentOp && currentOp.arity === 2) {
     const sep = el("span", "rule__sep"); sep.textContent = "et";
     row.appendChild(sep);
