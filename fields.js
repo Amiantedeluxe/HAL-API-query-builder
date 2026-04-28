@@ -135,6 +135,7 @@ const FIELDS = [
   ] },
   { name: "journalTitle_t",       label: "Titre de revue", type: "_t"     },
   { name: "anrProjectAcronym_s",       label: "Projet ANR (acronyme)", type: "_s"     },
+  { name: "anrProjectReference_s",       label: "Projet ANR (ANR-01-ABC...)", type: "_s"     },
 ];
 
 // Champs disponibles pour les facettes (on peut en ajouter d'autres ici)
