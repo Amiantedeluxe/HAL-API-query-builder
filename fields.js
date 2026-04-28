@@ -32,7 +32,10 @@ const OPERATORS_BY_TYPE = {
 
 const FIELDS = [
   { name: "authFullName_t",        label: "Auteur",               type: "_t"     },
-  { name: "collection_t",            label: "Collection",           type: "_t"     },
+  { name: "collection_t",            label: "Collection (nom)",           type: "_t"     },
+  { name: "collCode_s",            label: "Collection (code)",           type: "_s"     },
+  { name: "structure_t",            label: "Structure (nom)",           type: "_t"     },
+  { name: "structId_i",            label: "Structure (Id)",           type: "_i"     },
   { name: "doiId_id",              label: "DOI",                  type: "_id"    },
   { name: "publicationDateY_i",    label: "Année de publication", type: "_i"     },
   { name: "publicationDate_tdate", label: "Date de publication",  type: "_tdate" },
@@ -40,6 +43,26 @@ const FIELDS = [
   { value: "ART", label: "Article de revue" },
   { value: "COMM", label: "Communication dans un congrès" },
   { value: "COUV", label: "Chapitre d'ouvrage" },
+  { value: "THESE", label: "Thèse" },
+  { value: "MEM", label: "Mémoire" },
+  { value: "UNDEFINED", label: "Working Paper" },
+  { value: "COUV", label: "Chapitre d'ouvrage" },
+  { value: "IMG", label: "Image" },
+  { value: "POSTER", label: "Poster" },
+  { value: "REPORT", label: "Rapport" },
+  { value: "OTHER", label: "Autre type" },
+  { value: "OUV", label: "Ouvrage" },
+  { value: "BLOG", label: "Billet de blog" },
+  { value: "HDR", label: "HDR" },
+  { value: "LECTURE", label: "Cours" },
+  { value: "VIDEO", label: "Vidéo" },
+  { value: "PROCEEDINGS", label: "Proceedings / recueil de communications" },
+  { value: "NOTICE", label: "Notice" },
+  { value: "ISSUE", label: "Numéro spécial / dossier de revue" },
+  { value: "SOFTWARE", label: "Logiciel" },
+  { value: "TRAD", label: "Traduction" },
+  { value: "SON", label: "Document sonore" },
+  { value: "MAP", label: "Carte" },
   ]},
   { name: "primaryDomain_s",       label: "Discipline",    type: "_s", options: undefined },
   { name: "submitType_s",         label: "Type de dépôt",  type: "_s", options: [ 
@@ -109,6 +132,7 @@ const FIELDS = [
 { value: "mk", label: "Macédonien" },
   ] },
   { name: "journalTitle_t",       label: "Titre de revue", type: "_t"     },
+  { name: "anrProjectAcronym_s",       label: "Projet ANR (acronyme)", type: "_s"     },
 ];
 
 // Champs disponibles pour les facettes (on peut en ajouter d'autres ici)
