@@ -137,7 +137,7 @@ function renderDomainFilter() {
 
 function domainFq() {
   if (!domainFilter.l0) return null;
-  if (domainFilter.l2) return `level1_domain_s:${domainFilter.l2}`;
+  if (domainFilter.l2) return `level2_domain_s:${domainFilter.l2}`;
   if (domainFilter.l1) return `level1_domain_s:${domainFilter.l1}`;
   return `level0_domain_s:${domainFilter.l0}`;
 }
