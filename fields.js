@@ -1,10 +1,14 @@
 const OPERATORS_BY_TYPE = {
-  _s: [
+  _t: [
     { id: "contains",    label: "contient",       arity: 1 },
     { id: "is",          label: "est exactement", arity: 1 },
     { id: "is_not",      label: "n'est pas",      arity: 1 },
     { id: "starts_with", label: "commence par",   arity: 1 },
   ],
+  _s: [
+  { id: "is",     label: "est",       arity: 1 },
+  { id: "is_not", label: "n'est pas", arity: 1 },
+],
   _i: [
     { id: "eq",      label: "=",      arity: 1 },
     { id: "neq",     label: "≠",      arity: 1 },
@@ -15,6 +19,8 @@ const OPERATORS_BY_TYPE = {
   _id: [
     { id: "is",     label: "est",       arity: 1 },
     { id: "is_not", label: "n'est pas", arity: 1 },
+    { id: "exists",     label: "est renseigné",     arity: 0 },
+{ id: "not_exists", label: "n'est pas renseigné", arity: 0 },
   ],
   _tdate: [
     { id: "eq",           label: "le",       arity: 1 },
@@ -25,8 +31,8 @@ const OPERATORS_BY_TYPE = {
 };
 
 const FIELDS = [
-  { name: "authFullName_t",        label: "Auteur",               type: "_s"     },
-  { name: "collection_t",            label: "Collection",           type: "_s"     },
+  { name: "authFullName_t",        label: "Auteur",               type: "_t"     },
+  { name: "collection_t",            label: "Collection",           type: "_t"     },
   { name: "doiId_id",              label: "DOI",                  type: "_id"    },
   { name: "publicationDateY_i",    label: "Année de publication", type: "_i"     },
   { name: "publicationDate_tdate", label: "Date de publication",  type: "_tdate" },
@@ -102,7 +108,7 @@ const FIELDS = [
 { value: "lv", label: "Letton" },
 { value: "mk", label: "Macédonien" },
   ] },
-  { name: "journalTitle_s",       label: "Titre de revue", type: "_s"     },
+  { name: "journalTitle_t",       label: "Titre de revue", type: "_t"     },
 ];
 
 // Champs disponibles pour les facettes (on peut en ajouter d'autres ici)
