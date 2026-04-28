@@ -12,11 +12,8 @@ function toHALDate(v) {
 
 function serializeRule(rule) {
   const field = getField(rule.field);
-  if (!field) return "";
+  if (!field || !rule.value.trim()) return "";
   const { name, type } = field;
-  if (rule.operator === "exists")     return `${name}:[* TO *]`;
-  if (rule.operator === "not_exists") return `NOT ${name}:[* TO *]`;
-  if (!rule.value.trim()) return "";
   const v  = rule.value.trim();
   const v2 = (rule.value2 || "").trim();
 
@@ -80,7 +77,7 @@ function serializeFreetextQ(text, fieldScope) {
 
 // ─── Construction de l'URL complète ──────────────────────────────────────────
 
-function buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets) {
+function buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets, domainFqStr) {
   const parts = [];
 
   parts.push(`q=${encodeURIComponent(serializeFreetextQ(qText, qScope))}`);
@@ -89,6 +86,7 @@ function buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets) {
     const fq = serializeNode(fqGroup).trim();
     if (fq) parts.push(`fq=${encodeURIComponent(fq)}`);
   });
+  if (domainFqStr) parts.push(`fq=${encodeURIComponent(domainFqStr)}`);
 
   if (params.rows !== "" && params.rows !== undefined) parts.push(`rows=${params.rows}`);
   if (params.wt)     parts.push(`wt=${params.wt}`);
@@ -113,7 +111,7 @@ function buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets) {
   return `${base}/?${parts.join("&")}`;
 }
 
-function buildHALUrlReadable(baseUrl, qText, qScope, fqGroups, params, facets) {
+function buildHALUrlReadable(baseUrl, qText, qScope, fqGroups, params, facets, domainFqStr) {
   const parts = [];
 
   parts.push(`q=${serializeFreetextQ(qText, qScope)}`);
@@ -122,6 +120,7 @@ function buildHALUrlReadable(baseUrl, qText, qScope, fqGroups, params, facets) {
     const fq = serializeNode(fqGroup).trim();
     if (fq) parts.push(`fq=${fq}`);
   });
+  if (domainFqStr) parts.push(`fq=${domainFqStr}`);
 
   if (params.rows !== "" && params.rows !== undefined) parts.push(`rows=${params.rows}`);
   if (params.wt)     parts.push(`wt=${params.wt}`);
