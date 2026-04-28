@@ -160,6 +160,14 @@
     .facet-options-row { display: flex; gap: 10px; flex-wrap: wrap; }
     .facet-opt { min-width: 140px; }
 
+
+    /* ── Domaine disciplinaire ── */
+    .domain-filter { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .domain-filter label { font-size: .78rem; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
+    .domain-select { font-family: var(--sans); font-size: .82rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 5px 26px 5px 9px; cursor: pointer; outline: none; transition: border-color .12s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236e7a9e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 7px center; min-width: 200px; }
+    .domain-select:focus { border-color: var(--accent); }
+    #domain-l1-wrap { display: none; align-items: center; gap: 8px; }
+    .domain-arrow { color: var(--text-dim); font-size: .85rem; }
     /* ── Doc mode ── */
     .doc-input-row { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
     .doc-input-row label { font-size: .82rem; color: var(--text-muted); white-space: nowrap; }
@@ -263,6 +271,20 @@
         </button>
       </div>
       <div class="block-body">
+        <!-- Filtre domaine disciplinaire -->
+        <div class="domain-filter">
+          <label>Domaine</label>
+          <select id="domain-l0" class="domain-select">
+            <option value="">— toutes disciplines —</option>
+          </select>
+          <span id="domain-l1-wrap">
+            <span class="domain-arrow">›</span>
+            <select id="domain-l1" class="domain-select">
+              <option value="">— toute la discipline —</option>
+            </select>
+          </span>
+          <button id="domain-clear" class="btn btn--ghost btn--sm" style="display:none" title="Effacer">×</button>
+        </div>
         <div id="fq-list" class="fq-list"></div>
         <div id="fq-empty" class="fq-empty">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -432,6 +454,7 @@
   <option value="publicationDateY_i"><option value="submittedDate_tdate"><option value="score">
 </datalist>
 
+<script src="domains.js"></script>
 <script src="fields.js"></script>
 <script src="serialize.js"></script>
 <script src="app.js"></script>
