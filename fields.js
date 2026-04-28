@@ -14,9 +14,6 @@ const OPERATORS_BY_TYPE = {
   _i: [
     { id: "eq",      label: "=",      arity: 1 },
     { id: "neq",     label: "≠",      arity: 1 },
-    { id: "lt",      label: "<",      arity: 1 },
-    { id: "gt",      label: ">",      arity: 1 },
-    { id: "between", label: "entre",  arity: 2 },
   ],
   _id: [
     { id: "is",     label: "est",       arity: 1 },
@@ -33,13 +30,15 @@ const OPERATORS_BY_TYPE = {
 };
 
 const FIELDS = [
-  { name: "authFullName_t",        label: "Auteur",               type: "_t"     },
+  { name: "authFullName_t",        label: "Auteur (nom complet)",               type: "_t"     },
+  { name: "authFirstName_t",        label: "Prénom",               type: "_t"     },
+  { name: "authLastName_t",        label: "Nom de famille",               type: "_t"     },
   { name: "collection_t",            label: "Collection (nom)",           type: "_t"     },
   { name: "collCode_s",            label: "Collection (code)",           type: "_s"     },
   { name: "structure_t",            label: "Structure (nom)",           type: "_t"     },
   { name: "structId_i",            label: "Structure (Id)",           type: "_i"     },
   { name: "doiId_id",              label: "DOI",                  type: "_id"    },
-  { name: "publicationDateY_i",    label: "Année de publication", type: "_i"     },
+  { name: "authIdHal_s",              label: "IdHal de l'auteur",                  type: "_s"    },
   { name: "publicationDate_tdate", label: "Date de publication",  type: "_tdate" },
   { name: "docType_s",            label: "Type de document",    type: "_s", options: [ 
   { value: "ART", label: "Article de revue" },
