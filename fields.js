@@ -8,6 +8,8 @@ const OPERATORS_BY_TYPE = {
   _s: [
   { id: "is",     label: "est",       arity: 1 },
   { id: "is_not", label: "n'est pas", arity: 1 },
+  { id: "exists",     label: "est renseigné",     arity: 0 },
+  { id: "not_exists", label: "n'est pas renseigné", arity: 0 },
 ],
   _i: [
     { id: "eq",      label: "=",      arity: 1 },
