@@ -12,8 +12,11 @@ function toHALDate(v) {
 
 function serializeRule(rule) {
   const field = getField(rule.field);
-  if (!field || !rule.value.trim()) return "";
+  if (!field) return "";
   const { name, type } = field;
+  if (rule.operator === "exists")     return `${name}:[* TO *]`;
+  if (rule.operator === "not_exists") return `NOT ${name}:[* TO *]`;
+  if (!rule.value.trim()) return "";
   const v  = rule.value.trim();
   const v2 = (rule.value2 || "").trim();
 
