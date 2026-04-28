@@ -22,6 +22,9 @@ let qScope = "all"; // "all" | "title_s" | "abstract_s" | "keyword_s"
 // Bloc 2 — Périmètre (fq)
 let fqGroups = [];
 
+// Filtre domaine disciplinaire
+let domainFilter = { l0: "", l1: "" };
+
 // Bloc 3 — Affichage
 let displayState = {
   flMode:      "default", // "default" | "all" | "pick"
@@ -62,6 +65,7 @@ function render() {
 // ─── Bloc 2 : Périmètre (fq) ─────────────────────────────────────────────────
 
 function renderFqSection() {
+  renderDomainFilter();
   const container = document.getElementById("fq-list");
   const empty     = document.getElementById("fq-empty");
   container.innerHTML = "";
@@ -71,6 +75,46 @@ function renderFqSection() {
     empty.style.display = "none";
     fqGroups.forEach(g => container.appendChild(renderGroup(g, true, "fq")));
   }
+}
+
+// ─── Filtre domaine disciplinaire ─────────────────────────────────────────────
+
+function renderDomainFilter() {
+  const l0Select = document.getElementById("domain-l0");
+  const l1Wrap   = document.getElementById("domain-l1-wrap");
+  const l1Select = document.getElementById("domain-l1");
+
+  // Remplir le select level0 si vide
+  if (l0Select.options.length <= 1) {
+    Object.entries(DOMAIN_TREE).sort((a,b) => a[1].label.localeCompare(b[1].label)).forEach(([code, d]) => {
+      const opt = document.createElement("option");
+      opt.value = code; opt.textContent = d.label;
+      l0Select.appendChild(opt);
+    });
+  }
+  l0Select.value = domainFilter.l0;
+  document.getElementById("domain-clear").style.display = domainFilter.l0 ? "inline-flex" : "none";
+
+  // Level 1
+  l1Select.innerHTML = "<option value=''>— toute la discipline —</option>";
+  if (domainFilter.l0 && DOMAIN_TREE[domainFilter.l0]) {
+    const children = DOMAIN_TREE[domainFilter.l0].children;
+    Object.entries(children).sort((a,b) => a[1].localeCompare(b[1])).forEach(([code, label]) => {
+      const opt = document.createElement("option");
+      opt.value = code; opt.textContent = label;
+      l1Select.appendChild(opt);
+    });
+    l1Wrap.style.display = "flex";
+  } else {
+    l1Wrap.style.display = "none";
+  }
+  l1Select.value = domainFilter.l1;
+}
+
+function domainFq() {
+  if (!domainFilter.l0) return null;
+  if (domainFilter.l1) return `level1_domain_s:${domainFilter.l1}`;
+  return `level0_domain_s:${domainFilter.l0}`;
 }
 
 // ─── Bloc 3 : Affichage ───────────────────────────────────────────────────────
@@ -207,9 +251,7 @@ function renderRule(rule) {
 
   const currentOp = ops.find(o => o.id === rule.operator);
   const fieldType = getField(rule.field).type;
-  if (currentOp && currentOp.arity >= 1) {
   row.appendChild(renderValueInput(rule, "value", fieldType));
-  }
   if (currentOp && currentOp.arity === 2) {
     const sep = el("span", "rule__sep"); sep.textContent = "et";
     row.appendChild(sep);
@@ -278,8 +320,8 @@ function updatePreview() {
       fl:        buildFl(),
     };
     const facets = { fields: displayState.facetFields, sort: displayState.facetSort, limit: displayState.facetLimit };
-    readable = buildHALUrlReadable(baseUrl, qText, qScope, fqGroups, params, facets);
-    encoded  = buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets);
+    readable = buildHALUrlReadable(baseUrl, qText, qScope, fqGroups, params, facets, domainFq());
+    encoded  = buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets, domainFq());
   }
 
   document.getElementById("url-output").textContent = readable;
@@ -302,7 +344,7 @@ function copyUrl() {
     const id = docId.trim();
     url = id ? `${baseUrl.trim().replace(/\/$/, "")}/?q=docid:${encodeURIComponent(id)}&fl=*` : "";
   } else {
-    url = buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets);
+    url = buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets, domainFq());
   }
   if (!url || url === "#") return;
   navigator.clipboard.writeText(url).then(() => {
@@ -318,6 +360,7 @@ function resetAll() {
   appMode      = "search";
   qText        = ""; qScope = "all";
   fqGroups     = [];
+  domainFilter = { l0: "", l1: "" };
   displayState = { flMode: "default", flPicked: [], rows: "30", countOnly: false, start: "0", wt: "json", indent: true, sortField: "", sortDir: "desc", facetFields: [], facetSort: "", facetLimit: "" };
   docId        = "";
 
@@ -378,6 +421,23 @@ document.addEventListener("DOMContentLoaded", () => {
   // Bloc 1 — recherche textuelle
   document.getElementById("q-text-input").oninput  = e => { qText  = e.target.value; updatePreview(); };
   document.getElementById("q-scope-select").onchange = e => { qScope = e.target.value; updatePreview(); };
+
+  // Bloc 2 — domaine disciplinaire
+  document.getElementById("domain-l0").onchange = e => {
+    domainFilter.l0 = e.target.value;
+    domainFilter.l1 = "";
+    renderDomainFilter();
+    updatePreview();
+  };
+  document.getElementById("domain-l1").onchange = e => {
+    domainFilter.l1 = e.target.value;
+    updatePreview();
+  };
+  document.getElementById("domain-clear").onclick = () => {
+    domainFilter = { l0: "", l1: "" };
+    renderDomainFilter();
+    updatePreview();
+  };
 
   // Bloc 2 — ajouter un filtre
   document.getElementById("add-fq-btn").onclick = () => { fqGroups.push(createGroup("AND")); render(); };
