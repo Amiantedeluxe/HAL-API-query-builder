@@ -83,36 +83,61 @@ function renderDomainFilter() {
   const l0Select = document.getElementById("domain-l0");
   const l1Wrap   = document.getElementById("domain-l1-wrap");
   const l1Select = document.getElementById("domain-l1");
+  const l2Wrap   = document.getElementById("domain-l2-wrap");
+  const l2Select = document.getElementById("domain-l2");
 
-  // Remplir le select level0 si vide
+  // Level 0 — remplir une seule fois
   if (l0Select.options.length <= 1) {
-    Object.entries(DOMAIN_TREE).sort((a,b) => a[1].label.localeCompare(b[1].label)).forEach(([code, d]) => {
-      const opt = document.createElement("option");
-      opt.value = code; opt.textContent = d.label;
-      l0Select.appendChild(opt);
-    });
+    Object.entries(DOMAIN_TREE)
+      .sort((a,b) => a[1].label.localeCompare(b[1].label))
+      .forEach(([code, d]) => {
+        const opt = document.createElement("option");
+        opt.value = code; opt.textContent = d.label;
+        l0Select.appendChild(opt);
+      });
   }
   l0Select.value = domainFilter.l0;
   document.getElementById("domain-clear").style.display = domainFilter.l0 ? "inline-flex" : "none";
 
   // Level 1
   l1Select.innerHTML = "<option value=''>— toute la discipline —</option>";
-  if (domainFilter.l0 && DOMAIN_TREE[domainFilter.l0]) {
-    const children = DOMAIN_TREE[domainFilter.l0].children;
-    Object.entries(children).sort((a,b) => a[1].localeCompare(b[1])).forEach(([code, label]) => {
-      const opt = document.createElement("option");
-      opt.value = code; opt.textContent = label;
-      l1Select.appendChild(opt);
-    });
+  const d0 = domainFilter.l0 && DOMAIN_TREE[domainFilter.l0];
+  if (d0) {
+    Object.entries(d0.children)
+      .sort((a,b) => a[1].label.localeCompare(b[1].label))
+      .forEach(([code, d1]) => {
+        const opt = document.createElement("option");
+        opt.value = code; opt.textContent = d1.label;
+        l1Select.appendChild(opt);
+      });
     l1Wrap.style.display = "flex";
   } else {
     l1Wrap.style.display = "none";
   }
   l1Select.value = domainFilter.l1;
+
+  // Level 2
+  l2Select.innerHTML = "<option value=''>— toute la sous-discipline —</option>";
+  const d1 = domainFilter.l1 && d0 && d0.children[domainFilter.l1];
+  if (d1 && d1.children && Object.keys(d1.children).length > 0) {
+    Object.entries(d1.children)
+      .sort((a,b) => a[1].localeCompare(b[1]))
+      .forEach(([code, label]) => {
+        const opt = document.createElement("option");
+        opt.value = code; opt.textContent = label;
+        l2Select.appendChild(opt);
+      });
+    l2Wrap.style.display = "flex";
+  } else {
+    l2Wrap.style.display = "none";
+    domainFilter.l2 = "";
+  }
+  l2Select.value = domainFilter.l2;
 }
 
 function domainFq() {
   if (!domainFilter.l0) return null;
+  if (domainFilter.l2) return `level1_domain_s:${domainFilter.l2}`;
   if (domainFilter.l1) return `level1_domain_s:${domainFilter.l1}`;
   return `level0_domain_s:${domainFilter.l0}`;
 }
