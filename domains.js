@@ -539,4 +539,4 @@ const DOMAIN_TREE = {
     "qfin.tr": { label: "Microstructure des marchés [q-fin.TR]", children: {} },
     "qfin.pr": { label: "Pricing [q-fin.PR]", children: {} },
   }},
-};
+}
