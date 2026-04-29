@@ -19,6 +19,23 @@
   --mono:       'IBM Plex Mono', monospace;
   --sans:       'IBM Plex Sans', sans-serif;
 }
+body.light {
+  --bg:         #f5f7fa;
+  --surface:    #ffffff;
+  --surface-2:  #eef1f6;
+  --surface-3:  #e4e8f0;
+  --border:     #d0d7e3;
+  --border-2:   #b8c2d4;
+  --accent:     #1a6fd4;
+  --accent-dim: rgba(26,111,212,.1);
+  --text:       #1a2035;
+  --text-muted: #5a6584;
+  --text-dim:   #a0aabb;
+  --red:        #d93636;
+  --green:      #1a8a3c;
+  --orange:     #c4620a;
+  --purple:     #6b3fc4;
+}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 16px; }
