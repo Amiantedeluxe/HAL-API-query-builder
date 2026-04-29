@@ -422,14 +422,25 @@ function renderFacetList() {
   list.innerHTML = "";
   displayState.facetFields.forEach((val, idx) => {
     const row   = el("div", "facet-row");
-    const input = el("input", "rule__input facet-field-input");
-    input.type = "text"; input.placeholder = "ex: docType_s"; input.value = val;
-    input.setAttribute("list", "facet-suggestions");
-    input.oninput = () => { displayState.facetFields[idx] = input.value; updatePreview(); };
-    row.appendChild(input);
+
+    const select = el("select", "rule__select");
+    const blank  = document.createElement("option");
+    blank.value = ""; blank.textContent = "— choisir un champ —";
+    select.appendChild(blank);
+    FIELDS.forEach(f => {
+      const opt = document.createElement("option");
+      opt.value   = f.name;
+      opt.textContent = f.label + " (" + f.name + ")";
+      if (f.name === val) opt.selected = true;
+      select.appendChild(opt);
+    });
+    select.onchange = () => { displayState.facetFields[idx] = select.value; updatePreview(); };
+    row.appendChild(select);
+
     const del = iconBtn("×", "btn btn--ghost btn--icon", "Supprimer");
     del.onclick = () => { displayState.facetFields.splice(idx, 1); renderFacetList(); updatePreview(); };
     row.appendChild(del);
+
     list.appendChild(row);
   });
 }
