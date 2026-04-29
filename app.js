@@ -52,9 +52,11 @@ let baseUrl = "https://api.archives-ouvertes.fr/search";
 function render() {
   if (appMode === "doc") {
     document.getElementById("block-search").style.display = "none";
+    document.getElementById("col-right").style.display    = "none";
     document.getElementById("block-doc").style.display    = "flex";
   } else {
     document.getElementById("block-search").style.display = "flex";
+    document.getElementById("col-right").style.display    = "flex";
     document.getElementById("block-doc").style.display    = "none";
     renderFqSection();
     renderDisplaySection();
@@ -137,7 +139,7 @@ function renderDomainFilter() {
 
 function domainFq() {
   if (!domainFilter.l0) return null;
-  if (domainFilter.l2) return `level2_domain_s:${domainFilter.l2}`;
+  if (domainFilter.l2) return `level1_domain_s:${domainFilter.l2}`;
   if (domainFilter.l1) return `level1_domain_s:${domainFilter.l1}`;
   return `level0_domain_s:${domainFilter.l0}`;
 }
@@ -276,9 +278,7 @@ function renderRule(rule) {
 
   const currentOp = ops.find(o => o.id === rule.operator);
   const fieldType = getField(rule.field).type;
-  if (currentOp && currentOp.arity >= 1) {
-    row.appendChild(renderValueInput(rule, "value", fieldType));
-  }
+  row.appendChild(renderValueInput(rule, "value", fieldType));
   if (currentOp && currentOp.arity === 2) {
     const sep = el("span", "rule__sep"); sep.textContent = "et";
     row.appendChild(sep);
@@ -422,25 +422,14 @@ function renderFacetList() {
   list.innerHTML = "";
   displayState.facetFields.forEach((val, idx) => {
     const row   = el("div", "facet-row");
-
-    const select = el("select", "rule__select");
-    const blank  = document.createElement("option");
-    blank.value = ""; blank.textContent = "— choisir un champ —";
-    select.appendChild(blank);
-    FIELDS.forEach(f => {
-      const opt = document.createElement("option");
-      opt.value   = f.name;
-      opt.textContent = f.label + " (" + f.name + ")";
-      if (f.name === val) opt.selected = true;
-      select.appendChild(opt);
-    });
-    select.onchange = () => { displayState.facetFields[idx] = select.value; updatePreview(); };
-    row.appendChild(select);
-
+    const input = el("input", "rule__input facet-field-input");
+    input.type = "text"; input.placeholder = "ex: docType_s"; input.value = val;
+    input.setAttribute("list", "facet-suggestions");
+    input.oninput = () => { displayState.facetFields[idx] = input.value; updatePreview(); };
+    row.appendChild(input);
     const del = iconBtn("×", "btn btn--ghost btn--icon", "Supprimer");
     del.onclick = () => { displayState.facetFields.splice(idx, 1); renderFacetList(); updatePreview(); };
     row.appendChild(del);
-
     list.appendChild(row);
   });
 }
