@@ -449,6 +449,12 @@ function renderFacetList() {
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  const themeBtn = document.getElementById('theme-btn');
+themeBtn.onclick = () => {
+  const isLight = document.body.classList.toggle('light');
+  themeBtn.textContent = isLight ? '☾ Dark' : '☀ Light';
+};
+
   // Mode
   document.getElementById("mode-search").onchange = () => { appMode = "search"; render(); };
   document.getElementById("mode-doc").onchange    = () => { appMode = "doc";    render(); };
