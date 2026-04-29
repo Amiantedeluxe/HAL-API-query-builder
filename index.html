@@ -34,13 +34,14 @@
 
 <div class="app-body">
 
+  <!-- Base URL — pleine largeur -->
   <div class="base-url-row">
     <label>Point d'entrée</label>
     <input id="input-base-url" type="text" value="https://api.archives-ouvertes.fr/search" spellcheck="false" />
   </div>
 
-  <!-- ══ MODE RECHERCHE ════════════════════════════════════════════════════ -->
-  <div id="block-search" style="display:flex; flex-direction:column; gap:16px;">
+  <!-- Colonne gauche -->
+  <div class="col-left" id="block-search">
 
     <!-- Bloc 1 — Recherche textuelle -->
     <div class="block">
@@ -79,19 +80,18 @@
         </button>
       </div>
       <div class="block-body">
-        <!-- Filtre domaine disciplinaire -->
         <div class="domain-filter">
           <label>Domaine</label>
           <select id="domain-l0" class="domain-select">
             <option value="">— toutes disciplines —</option>
           </select>
-          <span id="domain-l1-wrap" style="display:none">
+          <span id="domain-l1-wrap">
             <span class="domain-arrow">›</span>
             <select id="domain-l1" class="domain-select">
               <option value="">— toute la discipline —</option>
             </select>
           </span>
-          <span id="domain-l2-wrap" style="display:none">
+          <span id="domain-l2-wrap">
             <span class="domain-arrow">›</span>
             <select id="domain-l2" class="domain-select">
               <option value="">— toute la sous-discipline —</option>
@@ -107,18 +107,17 @@
       </div>
     </div>
 
-    <!-- Bloc 3 — Affichage -->
+    <!-- Bloc 3 — Champs retournés + facettes -->
     <div class="block">
       <div class="block-header">
         <div class="block-number block-number--3">3</div>
         <div class="block-titles">
           <div class="block-title">Qu'est-ce qu'on affiche ?</div>
-          <div class="block-sub">Champs retournés, nombre de résultats, format, tri et facettes.</div>
+          <div class="block-sub">Champs retournés et facettes.</div>
         </div>
       </div>
       <div class="block-body">
 
-        <!-- fl -->
         <div class="fl-modes">
           <label class="fl-mode-option">
             <input type="radio" name="fl-mode" value="default" checked />
@@ -131,14 +130,14 @@
             <input type="radio" name="fl-mode" value="all" />
             <div>
               <div class="fl-mode-title">Tous les champs <code style="font-family:var(--mono);font-size:.7rem;color:var(--purple)">fl=*</code></div>
-              <div class="fl-mode-desc">Toutes les métadonnées disponibles. Utile pour explorer un corpus.</div>
+              <div class="fl-mode-desc">Toutes les métadonnées disponibles.</div>
             </div>
           </label>
           <label class="fl-mode-option">
             <input type="radio" name="fl-mode" value="pick" />
             <div>
               <div class="fl-mode-title">Choisir les champs</div>
-              <div class="fl-mode-desc">Sélectionnez précisément ce dont vous avez besoin. Recommandé pour l'export.</div>
+              <div class="fl-mode-desc">Sélectionnez précisément ce dont vous avez besoin.</div>
             </div>
           </label>
         </div>
@@ -147,52 +146,6 @@
           <div id="fl-checkboxes" class="fl-checkboxes"></div>
         </div>
 
-        <!-- Params -->
-        <div class="display-params">
-
-          <div class="params-row">
-            <div class="display-field">
-              <label>Nombre de résultats</label>
-              <input id="rows-input" type="number" value="30" min="0" max="10000" />
-            </div>
-            <button id="count-only-btn" class="btn btn--outline btn--sm" title="Retourne uniquement le nombre total de résultats (rows=0)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              Juste le compte
-            </button>
-            <div class="display-field">
-              <label>Décalage (start)</label>
-              <input id="start-input" type="number" value="0" min="0" />
-            </div>
-            <div class="display-field-inline" style="padding-bottom:4px">
-              <input type="checkbox" id="indent-check" checked />
-              <label for="indent-check">Indenter</label>
-            </div>
-            <div class="display-field">
-              <label>Format</label>
-              <select id="wt-select">
-                <option value="json" selected>JSON</option>
-                <option value="xml">XML</option>
-                <option value="csv">CSV</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="params-row">
-            <div class="display-field">
-              <label>Trier par</label>
-              <div class="sort-row">
-                <input id="sort-field" type="text" placeholder="ex: publicationDate_tdate" list="field-suggestions" />
-                <select id="sort-dir">
-                  <option value="desc">Décroissant</option>
-                  <option value="asc">Croissant</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Facettes -->
         <div class="facet-section">
           <div class="facet-header">
             <span class="facet-label">Facettes</span>
@@ -222,9 +175,86 @@
     </div>
 
   </div>
-  <!-- ══ FIN MODE RECHERCHE ════════════════════════════════════════════════ -->
+  <!-- FIN colonne gauche -->
 
-  <!-- ══ MODE DOCUMENT ════════════════════════════════════════════════════ -->
+  <!-- Colonne droite — Paramètres + URL -->
+  <div class="col-right" id="col-right">
+
+    <div class="block">
+      <div class="block-header">
+        <div class="block-number block-number--out">↗</div>
+        <div class="block-titles">
+          <div class="block-title">Paramètres de sortie</div>
+          <div class="block-sub">Nombre de résultats, format, tri.</div>
+        </div>
+      </div>
+      <div class="block-body">
+        <div class="display-params">
+
+          <div class="params-row">
+            <div class="display-field">
+              <label>Résultats (rows)</label>
+              <input id="rows-input" type="number" value="30" min="0" max="10000" />
+            </div>
+            <button id="count-only-btn" class="btn btn--outline btn--sm" title="rows=0 : retourne uniquement le nombre total">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Juste le compte
+            </button>
+          </div>
+
+          <div class="params-row">
+            <div class="display-field">
+              <label>Décalage (start)</label>
+              <input id="start-input" type="number" value="0" min="0" />
+            </div>
+            <div class="display-field">
+              <label>Format (wt)</label>
+              <select id="wt-select">
+                <option value="json" selected>JSON</option>
+                <option value="xml">XML</option>
+                <option value="csv">CSV</option>
+              </select>
+            </div>
+            <div class="display-field-inline">
+              <input type="checkbox" id="indent-check" checked />
+              <label for="indent-check">Indenter</label>
+            </div>
+          </div>
+
+          <div class="params-row">
+            <div class="display-field">
+              <label>Trier par</label>
+              <div class="sort-row">
+                <input id="sort-field" type="text" placeholder="ex: publicationDate_tdate" list="field-suggestions" />
+                <select id="sort-dir">
+                  <option value="desc">↓ Déc.</option>
+                  <option value="asc">↑ Crois.</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- URL générée -->
+    <div class="preview">
+      <div class="preview__header">
+        <div class="preview__dot"></div>
+        <span class="preview__title">URL générée</span>
+        <a id="open-link" href="#" target="_blank" class="btn btn--outline btn--sm">Ouvrir ↗</a>
+        <button id="copy-btn" class="btn btn--primary btn--sm">Copier</button>
+      </div>
+      <div class="preview__body">
+        <code id="url-output"></code>
+      </div>
+    </div>
+
+  </div>
+  <!-- FIN colonne droite -->
+
+  <!-- Mode document — pleine largeur -->
   <div id="block-doc" class="block" style="display:none; flex-direction:column;">
     <div class="block-header">
       <div class="block-number block-number--1">ID</div>
@@ -239,20 +269,6 @@
     </div>
     <div class="doc-note">
       Entrez le <code>docid</code> numérique HAL. Génère <code>q=docid:XXX&fl=*</code> pour retourner toutes les métadonnées disponibles.
-    </div>
-  </div>
-  <!-- ══ FIN MODE DOCUMENT ════════════════════════════════════════════════ -->
-
-  <!-- Preview -->
-  <div class="preview">
-    <div class="preview__header">
-      <div class="preview__dot"></div>
-      <span class="preview__title">URL générée</span>
-      <a id="open-link" href="#" target="_blank" class="btn btn--outline btn--sm">Ouvrir ↗</a>
-      <button id="copy-btn" class="btn btn--primary btn--sm">Copier</button>
-    </div>
-    <div class="preview__body">
-      <code id="url-output"></code>
     </div>
   </div>
 
