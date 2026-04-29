@@ -45,16 +45,17 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
   max-width: 1400px;
   margin: 0 auto;
   padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.app-columns {
   display: grid;
   grid-template-columns: 65fr 35fr;
-  grid-template-rows: auto 1fr;
   gap: 16px;
   align-items: start;
 }
-
-/* La base-url et le mode doc occupent toute la largeur */
-.base-url-row       { grid-column: 1 / -1; }
-#block-doc          { grid-column: 1 / -1; }
 
 /* Colonne gauche : blocs 1, 2, 3-gauche */
 .col-left {
