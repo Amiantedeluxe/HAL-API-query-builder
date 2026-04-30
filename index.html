@@ -123,6 +123,12 @@
           <label class="fl-mode-option">
             <input type="radio" name="fl-mode" value="default" checked />
             <div>
+              <div class="fl-mode-title">Juste le compte</div>
+              <div class="fl-mode-desc">Uniquement le nombre de résultats répondant aux critères</div>
+            </div>
+          <label class="fl-mode-option">
+            <input type="radio" name="fl-mode" value="default" checked />
+            <div>
               <div class="fl-mode-title">Champs par défaut</div>
               <div class="fl-mode-desc">HAL retourne un ensemble standard. Pratique pour explorer.</div>
             </div>
@@ -197,10 +203,6 @@
               <label>Résultats (rows)</label>
               <input id="rows-input" type="number" value="30" min="0" max="10000" />
             </div>
-            <button id="count-only-btn" class="btn btn--outline btn--sm" title="rows=0 : retourne uniquement le nombre total">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              Juste le compte
-            </button>
           </div>
 
           <div class="params-row">
