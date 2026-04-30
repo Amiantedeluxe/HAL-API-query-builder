@@ -499,18 +499,11 @@ document.querySelectorAll('input[name="fl-mode"]').forEach(r => {
   };
 });
 
-  // Bloc 3 — rows + count-only
-  document.getElementById("rows-input").addEventListener("input", e => {
-    displayState.rows = e.target.value;
-    displayState.countOnly = false;
-    document.getElementById("count-only-btn").classList.remove("btn--active");
-    updatePreview();
-  });
-  document.getElementById("count-only-btn").onclick = () => {
-    displayState.countOnly = !displayState.countOnly;
-    renderDisplaySection();
-    updatePreview();
-  };
+document.getElementById("rows-input").addEventListener("input", e => {
+  displayState.rows = e.target.value;
+  displayState.countOnly = false;
+  updatePreview();
+});
 
   // Bloc 3 — autres params
   const bind = (id, key) => {
