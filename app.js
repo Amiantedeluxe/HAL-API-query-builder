@@ -427,11 +427,11 @@ function renderFacetList() {
     FIELDS.forEach(f => {
       const opt = document.createElement("option");
       opt.value   = f.name;
-      opt.textContent = f.label + " (" + f.name + ")";
+      opt.textContent = f.label;
       if (f.name === val) opt.selected = true;
       select.appendChild(opt);
     });
-    select.onchange = () => { displayState.facetFields[idx] = select.value; updatePreview(); };
+    select.onchange = () => { displayState.facetFields[idx] = select.value.replace(/_t$/, "_s"); updatePreview(); };
     row.appendChild(select);
 
     const del = iconBtn("×", "btn btn--ghost btn--icon", "Supprimer");
