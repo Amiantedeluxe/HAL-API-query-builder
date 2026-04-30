@@ -157,14 +157,11 @@ function renderDisplaySection() {
 
   // rows / countOnly
   const rowsInput  = document.getElementById("rows-input");
-  const countBtn   = document.getElementById("count-only-btn");
   if (displayState.countOnly) {
     rowsInput.value    = "0";
     rowsInput.disabled = true;
-    countBtn.classList.add("btn--active");
   } else {
     rowsInput.disabled = false;
-    countBtn.classList.remove("btn--active");
   }
 }
 
@@ -493,9 +490,14 @@ themeBtn.onclick = () => {
   document.getElementById("add-fq-btn").onclick = () => { fqGroups.push(createGroup("AND")); render(); };
 
   // Bloc 3 — fl mode
-  document.querySelectorAll('input[name="fl-mode"]').forEach(r => {
-    r.onchange = () => { displayState.flMode = r.value; renderDisplaySection(); updatePreview(); };
-  });
+document.querySelectorAll('input[name="fl-mode"]').forEach(r => {
+  r.onchange = () => {
+    displayState.flMode    = r.value;
+    displayState.countOnly = (r.value === "count");
+    renderDisplaySection();
+    updatePreview();
+  };
+});
 
   // Bloc 3 — rows + count-only
   document.getElementById("rows-input").addEventListener("input", e => {
