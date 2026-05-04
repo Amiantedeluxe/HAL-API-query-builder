@@ -161,6 +161,7 @@ function renderDisplaySection() {
     rowsInput.value    = "0";
     rowsInput.disabled = true;
   } else {
+    if (!displayState.rows || displayState.rows === "0") displayState.rows = "30"; // 30 par défaut
     rowsInput.value    = displayState.rows;
     rowsInput.disabled = false;
   }
