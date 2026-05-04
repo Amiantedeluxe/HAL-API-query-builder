@@ -183,7 +183,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 .facet-section { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
 .facet-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .facet-label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); }
-.facet-fields-list { display: flex; flex-direction: column; margin-bottom: 0; }
+.facet-fields-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 0; }
 #add-facet-btn { margin-top: 8px; margin-bottom: 8px; }
 .facet-row { display: flex; align-items: center; gap: 8px; }
 .facet-field-input { min-width: 180px; flex: 1; }
