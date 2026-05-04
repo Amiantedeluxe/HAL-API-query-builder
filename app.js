@@ -451,7 +451,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeBtn = document.getElementById('theme-btn');
 themeBtn.onclick = () => {
   const isLight = document.body.classList.toggle('light');
-  themeBtn.textContent = isLight ? '🌞​ Light​' : '🌚​ Dark';
+  themeBtn.textContent = isLight ? '🌚​ Dark​' : '🌞​ Light';
 };
 
   // Mode
