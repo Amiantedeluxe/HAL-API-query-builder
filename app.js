@@ -27,10 +27,10 @@ let domainFilter = { l0: "", l1: "", l2: "" };
 
 // Bloc 3 — Affichage
 let displayState = {
-  flMode:      "default", // "default" | "all" | "pick"
+  flMode:      "count", // "default" | "all" | "pick"
   flPicked:    [],
-  rows:        "30",
-  countOnly:   false,
+  rows:        "0",
+  countOnly:   true,
   start:       "0",
   wt:          "json",
   indent:      true,
@@ -161,6 +161,7 @@ function renderDisplaySection() {
     rowsInput.value    = "0";
     rowsInput.disabled = true;
   } else {
+    rowsInput.value    = displayState.rows;
     rowsInput.disabled = false;
   }
 }
