@@ -183,9 +183,9 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 .facet-section { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
 .facet-header { display: flex; align-items: center; justify-content: space-between; }
 .facet-label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); }
-.facet-fields-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 0; margin-top: 6px; }
+.facet-fields-list { display: flex; flex-direction: column; margin-bottom: 0; margin-top: 6px; }
 #add-facet-btn { margin-top: 8px; margin-bottom: 8px; }
-.facet-row { display: flex; align-items: center; gap: 8px; }
+.facet-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
 .facet-field-input { min-width: 180px; flex: 1; }
 .facet-options-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .facet-opt { min-width: 140px; }
