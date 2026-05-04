@@ -75,10 +75,6 @@
           <div class="block-title">Dans quel périmètre ?</div>
           <div class="block-sub">Filtres structurels : collection, labo, type de document, langue… Laissez vide pour interroger toute la base HAL.</div>
         </div>
-        <button id="add-fq-btn" class="btn btn--outline btn--sm">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Ajouter un filtre
-        </button>
       </div>
       <div class="block-body">
         <div class="domain-filter">
@@ -104,6 +100,10 @@
         <div id="fq-empty" class="fq-empty">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           Aucun filtre — toute la base HAL sera interrogée.
+          <button id="add-fq-btn" class="btn btn--outline btn--sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Ajouter un filtre
+          </button>
         </div>
       </div>
     </div>
@@ -157,12 +157,9 @@
         <div class="facet-section">
           <div class="facet-header">
             <span class="facet-label">Facettes</span>
-            <button id="add-facet-btn" class="btn btn--outline btn--sm">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Ajouter
-            </button>
           </div>
           <div id="facet-fields-list" class="facet-fields-list"></div>
+          <button id="add-facet-btn" class="btn btn--outline btn--sm">+ Ajouter une facette</button>
           <div class="facet-options-row">
             <div class="display-field facet-opt">
               <label>facet.sort</label>
