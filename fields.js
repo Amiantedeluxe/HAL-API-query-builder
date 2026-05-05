@@ -143,6 +143,7 @@ const FIELDS = [
     { value: "1", label: "Non-spécifiée" },
     { value: "2", label: "Internationale" },  
     { value: "3", label: "Nationale" },
+  ] },
   { name: "authEmailDomain_s",       label: "Domaine mail (sans @)", type: "_s"     },
   { name: "arxivId_s",       label: "Id ArXiv", type: "_s"     },
   { name: "bookTitle_t",       label: "Titre de l'ouvrage", type: "_t"     },
