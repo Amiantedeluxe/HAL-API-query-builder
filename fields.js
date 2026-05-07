@@ -154,7 +154,7 @@ const FIELDS = [
   { name: "isbn_s",       label: "ISBN", type: "_s"     },
   { name: "issue_s",       label: "Volume", type: "_s"     },
   { name: "journalIssn_s",       label: "ISSN", type: "_s"     },
-],
+];
   
 
 // Champs disponibles pour les facettes (on peut en ajouter d'autres ici)
