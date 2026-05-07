@@ -16,6 +16,8 @@ function serializeRule(rule) {
   const { name, type } = field;
   if (rule.operator === "exists")     return `${name}:[* TO *]`;
   if (rule.operator === "not_exists") return `NOT ${name}:[* TO *]`;
+  if (rule.operator === "true")       return `${name}:true`;
+  if (rule.operator === "false")      return `${name}:false`;
   if (!rule.value.trim()) return "";
   const v  = rule.value.trim();
   const v2 = (rule.value2 || "").trim();
@@ -46,10 +48,6 @@ function serializeRule(rule) {
     if (rule.operator === "after")        return `${name}:[${d} TO *]`;
     if (rule.operator === "date_between") return `${name}:[${d} TO ${d2}]`;
   }
-  if (type === "_bool") {
-    if (rule.operator === "true")           return `${name}:true`;
-    if (rule.operator === "false")       return `${name}:false`;
-  } 
   return "";
 }
 
