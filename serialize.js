@@ -46,6 +46,10 @@ function serializeRule(rule) {
     if (rule.operator === "after")        return `${name}:[${d} TO *]`;
     if (rule.operator === "date_between") return `${name}:[${d} TO ${d2}]`;
   }
+  if (type === "_bool") {
+    if (rule.operator === "true")           return `${name}:true`;
+    if (rule.operator === "false")       return `${name}:false`;
+  } 
   return "";
 }
 
