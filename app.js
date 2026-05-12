@@ -294,6 +294,84 @@ function renderRule(rule) {
 
 function renderValueInput(rule, key, fieldType) {
   const field = getField(rule.field);
+  if (fieldType === "_domain") {
+  const wrap = el("div", "domain-inline");
+
+  const l0 = el("select", "domain-select");
+  l0.innerHTML = "<option value=''>— toutes disciplines —</option>";
+  Object.entries(DOMAIN_TREE)
+    .sort((a,b) => a[1].label.localeCompare(b[1].label))
+    .forEach(([code, d]) => {
+      const opt = document.createElement("option");
+      opt.value = code; opt.textContent = d.label;
+      if (code === (rule[key] || "").split("|")[0]) opt.selected = true;
+      l0.appendChild(opt);
+    });
+
+  const l1 = el("select", "domain-select");
+  const l2 = el("select", "domain-select");
+
+  function updateSelects() {
+    const v0 = l0.value;
+    l1.innerHTML = "<option value=''>— toute la discipline —</option>";
+    l2.innerHTML = "<option value=''>— toute la sous-discipline —</option>";
+    l1.style.display = "none"; l2.style.display = "none";
+    if (v0 && DOMAIN_TREE[v0]) {
+      Object.entries(DOMAIN_TREE[v0].children)
+        .sort((a,b) => a[1].label.localeCompare(b[1].label))
+        .forEach(([code, d]) => {
+          const opt = document.createElement("option");
+          opt.value = code; opt.textContent = d.label;
+          l1.appendChild(opt);
+        });
+      l1.style.display = "";
+    }
+  }
+
+  function updateL2() {
+    const v0 = l0.value, v1 = l1.value;
+    l2.innerHTML = "<option value=''>— toute la sous-discipline —</option>";
+    l2.style.display = "none";
+    const d1 = v1 && DOMAIN_TREE[v0] && DOMAIN_TREE[v0].children[v1];
+    if (d1 && d1.children && Object.keys(d1.children).length > 0) {
+      Object.entries(d1.children)
+        .sort((a,b) => a[1].localeCompare(b[1]))
+        .forEach(([code, label]) => {
+          const opt = document.createElement("option");
+          opt.value = code; opt.textContent = label;
+          l2.appendChild(opt);
+        });
+      l2.style.display = "";
+    }
+  }
+
+  function saveValue() {
+    rule[key] = l2.value || l1.value || l0.value;
+    updatePreview();
+  }
+
+  l0.onchange = () => { updateSelects(); l1.value = ""; l2.value = ""; saveValue(); };
+  l1.onchange = () => { updateL2(); l2.value = ""; saveValue(); };
+  l2.onchange = () => saveValue();
+
+  // Restore state
+  const saved = rule[key] || "";
+  if (saved) {
+    const parts = saved.split(".");
+    l0.value = parts[0] || "";
+    updateSelects();
+    if (parts.length >= 2) {
+      l1.value = parts[0] + "." + parts[1];
+      updateL2();
+    }
+    if (parts.length >= 3) {
+      l2.value = saved;
+    }
+  }
+
+  wrap.appendChild(l0); wrap.appendChild(l1); wrap.appendChild(l2);
+  return wrap;
+}
   if (field && field.options) {
     const select = el("select", "rule__select");
     const blank  = document.createElement("option");
