@@ -11,6 +11,10 @@ const OPERATORS_BY_TYPE = {
   { id: "exists",     label: "est renseigné",     arity: 0 },
   { id: "not_exists", label: "n'est pas renseigné", arity: 0 },
 ],
+  _domain: [
+  { id: "domain_is",     label: "est",     arity: 0 },
+  { id: "domain_is_not", label: "n'est pas", arity: 0 },
+],
   _i: [
     { id: "eq",      label: "=",      arity: 1 },
     { id: "neq",     label: "≠",      arity: 1 },
@@ -69,7 +73,7 @@ const FIELDS = [
     { value: "SON", label: "Document sonore" },
     { value: "MAP", label: "Carte" },
   ]},
-  { name: "primaryDomain_s",       label: "Discipline",    type: "_s", options: undefined },
+  { name: "domain",       label: "Discipline",    type: "_domain"},
   { name: "submitType_s",         label: "Type de dépôt",  type: "_s", options: [ 
     { value: "file", label: "avec fichier" },
     { value: "notice", label: "notice" },
