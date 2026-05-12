@@ -21,9 +21,9 @@ function serializeRule(rule) {
   if (type === "_domain") {
   if (!rule.value) return "";
   const parts = rule.value.split(".");
-  if (parts.length >= 3) return `level1_domain_s:${rule.value}`;
-  if (parts.length === 2) return `level1_domain_s:${rule.value}`;
-  return `level0_domain_s:${rule.value}`;
+  const field = parts.length >= 2 ? "level1_domain_s" : "level0_domain_s";
+  const expr  = `${field}:${rule.value}`;
+  return rule.operator === "domain_is_not" ? `NOT ${expr}` : expr;
 }
   if (!rule.value.trim()) return "";
   const v  = rule.value.trim();
