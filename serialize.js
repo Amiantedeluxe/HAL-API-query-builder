@@ -18,6 +18,13 @@ function serializeRule(rule) {
   if (rule.operator === "not_exists") return `NOT ${name}:[* TO *]`;
   if (rule.operator === "true")       return `${name}:true`;
   if (rule.operator === "false")      return `${name}:false`;
+  if (type === "_domain") {
+  if (!rule.value) return "";
+  const parts = rule.value.split(".");
+  if (parts.length >= 3) return `level1_domain_s:${rule.value}`;
+  if (parts.length === 2) return `level1_domain_s:${rule.value}`;
+  return `level0_domain_s:${rule.value}`;
+}
   if (!rule.value.trim()) return "";
   const v  = rule.value.trim();
   const v2 = (rule.value2 || "").trim();
