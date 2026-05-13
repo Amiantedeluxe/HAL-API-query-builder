@@ -162,15 +162,15 @@
           <button id="add-facet-btn" class="btn btn--outline btn--sm">+ Ajouter une facette</button>
           <div class="facet-options-row">
             <div class="display-field facet-opt">
-              <label>facet.sort</label>
+              <label>Tri des facettes <code style="font-family:var(--mono);font-size:.65rem;color:var(--accent)">(facet.sort)</code></label>
               <select id="facet-sort">
                 <option value="">— défaut —</option>
                 <option value="count">Par fréquence</option>
-                <option value="index">Alphabétiquelkj</option>
+                <option value="index">Alphabétique</option>
               </select>
             </div>
             <div class="display-field facet-opt">
-              <label>facet.limit</label>
+              <label>Nombre de résultats à afficher <code style="font-family:var(--mono);font-size:.65rem;color:var(--accent)">(facet.limit)</code></label>
               <input id="facet-limit" type="number" placeholder="— défaut —" min="1" style="width:120px" />
             </div>
           </div>
@@ -224,12 +224,12 @@
 
           <div class="params-row">
             <div class="display-field">
-              <label>Trier par (sort=)</label>
+              <label>Trier par (sort)</label>
               <div class="sort-row">
                 <input id="sort-field" type="text" placeholder="ex: publicationDate_tdate" list="field-suggestions" />
                 <select id="sort-dir">
-                  <option value="desc">↓ Déc. <label>desc</label></option>
-                  <option value="asc">↑ Crois. <label>asc</label></option>
+                  <option value="desc">↓ Déc. </option>
+                  <option value="asc">↑ Crois. </option>
                 </select>
               </div>
             </div>

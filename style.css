@@ -194,7 +194,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 .display-params { display: flex; flex-direction: column; gap: 12px; }
 .params-row { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
 .display-field { display: flex; flex-direction: column; gap: 5px; }
-.display-field label { font-family: var(--mono); font-size: .68rem; color: var(--text-muted); }
+.display-field label { font-family: var(--mono); font-size: .68rem; color: var(--text); }
 .display-field input, .display-field select { font-family: var(--mono); font-size: .8rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 5px 9px; outline: none; transition: border-color .12s; }
 .display-field input:focus, .display-field select:focus { border-color: var(--accent); }
 .display-field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236e7a9e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 7px center; padding-right: 24px; background-color: var(--bg); }
