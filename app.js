@@ -310,6 +310,8 @@ function renderValueInput(rule, key, fieldType) {
 
   const l1 = el("select", "domain-select");
   const l2 = el("select", "domain-select");
+  l1.style.display = "none";
+  l2.style.display = "none";
 
   function updateSelects() {
     const v0 = l0.value;
