@@ -216,6 +216,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 #domain-l1-wrap { display: none; align-items: center; gap: 8px; }
 #domain-l2-wrap { display: none; align-items: center; gap: 8px; }
 .domain-arrow { color: var(--text-dim); font-size: .85rem; }
+.domain-inline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
 /* ── Doc mode ── */
 .doc-input-row { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
