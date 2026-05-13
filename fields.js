@@ -12,8 +12,8 @@ const OPERATORS_BY_TYPE = {
   { id: "not_exists", label: "n'est pas renseigné", arity: 0 },
 ],
   _domain: [
-  { id: "domain_is",     label: "est",     arity: 0 },
-  { id: "domain_is_not", label: "n'est pas", arity: 0 },
+  { id: "domain_is",     label: "est",     arity: 1 },
+  { id: "domain_is_not", label: "n'est pas", arity: 1 },
 ],
   _i: [
     { id: "eq",      label: "=",      arity: 1 },
