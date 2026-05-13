@@ -204,6 +204,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 .display-field-inline label { font-family: var(--mono); font-size: .78rem; color: var(--text-muted); cursor: pointer; white-space: nowrap; }
 .sort-row { display: flex; gap: 6px; }
 .sort-row input { width: 160px; }
+.field-code { font-family:var(--mono);font-size:.65rem;color:var(--accent); }
 
 /* Bouton "Juste le compte" */
 .btn--active { background: var(--orange) !important; color: #0d1117 !important; border-color: var(--orange) !important; font-weight: 600; }
