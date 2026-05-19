@@ -445,7 +445,7 @@ function renderFacetList() {
     select.appendChild(blank);
     FIELDS.forEach(f => {
       const opt = document.createElement("option");
-      opt.value   = f.name;
+      opt.value   = f.name.replace(/_t$/, "_s");
       opt.textContent = f.label;
       if (f.name === val) opt.selected = true;
       select.appendChild(opt);
