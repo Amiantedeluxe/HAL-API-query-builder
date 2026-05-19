@@ -447,7 +447,7 @@ function renderFacetList() {
       const opt = document.createElement("option");
       opt.value   = f.name.replace(/_t$/, "_s");
       opt.textContent = f.label;
-      if (f.name === val) opt.selected = true;
+      if (f.name.replace(/_t$/, "_s") === val) opt.selected = true;
       select.appendChild(opt);
     });
     select.onchange = () => { displayState.facetFields[idx] = select.value.replace(/_t$/, "_s"); updatePreview(); };
