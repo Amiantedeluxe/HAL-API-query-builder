@@ -362,8 +362,8 @@ function updatePreview() {
       fl:        buildFl(),
     };
     const facets = { fields: displayState.facetFields, sort: displayState.facetSort, limit: displayState.facetLimit };
-    readable = buildHALUrlReadable(baseUrl, qText, qScope, fqGroups, params, facets, domainFq());
-    encoded  = buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets, domainFq());
+    readable = buildHALUrlReadable(baseUrl, qText, qScope, fqGroups, params, facets);
+    encoded  = buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets);
   }
 
   document.getElementById("url-output").textContent = readable;
@@ -386,7 +386,7 @@ function copyUrl() {
     const id = docId.trim();
     url = id ? `${baseUrl.trim().replace(/\/$/, "")}/?q=docid:${encodeURIComponent(id)}&fl=*` : "";
   } else {
-    url = buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets, domainFq());
+    url = buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets);
   }
   if (!url || url === "#") return;
   navigator.clipboard.writeText(url).then(() => {
