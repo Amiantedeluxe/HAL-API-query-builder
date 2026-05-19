@@ -104,7 +104,7 @@ function renderDisplaySection() {
 function renderFlCheckboxes() {
   const grid = document.getElementById("fl-checkboxes");
   grid.innerHTML = "";
-  FIELDS.forEach(f => {
+  [...FIELDS].sort((a, b) => a.label.localeCompare(b.label)).forEach(f => {
     const label = el("label", "fl-checkbox-label");
     const cb    = document.createElement("input");
     cb.type    = "checkbox";
@@ -443,7 +443,7 @@ function renderFacetList() {
     const blank  = document.createElement("option");
     blank.value = ""; blank.textContent = "— choisir un champ —";
     select.appendChild(blank);
-    FIELDS.forEach(f => {
+    [...FIELDS].sort((a, b) => a.label.localeCompare(b.label)).forEach(f => {
       const opt = document.createElement("option");
       opt.value   = f.name.replace(/_t$/, "_s");
       opt.textContent = f.label;
