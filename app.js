@@ -174,7 +174,7 @@ function renderFlCheckboxes() {
     const label = el("label", "fl-checkbox-label");
     const cb    = document.createElement("input");
     cb.type    = "checkbox";
-    cb.value   = f.name;
+    cb.value   = f.namereplace(/_t$/, "_s");
     cb.checked = displayState.flPicked.includes(f.name);
     cb.onchange = () => {
       if (cb.checked) { if (!displayState.flPicked.includes(f.name)) displayState.flPicked.push(f.name); }
