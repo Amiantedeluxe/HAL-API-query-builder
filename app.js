@@ -109,9 +109,10 @@ function renderFlCheckboxes() {
     const cb    = document.createElement("input");
     cb.type    = "checkbox";
     cb.value   = f.name.replace(/_t$/, "_s");
-    cb.checked = displayState.flPicked.includes(f.name);
+    cb.checked = displayState.flPicked.includes(f.name.replace(/_t$/, "_s"));
     cb.onchange = () => {
-      if (cb.checked) { if (!displayState.flPicked.includes(f.name)) displayState.flPicked.push(f.name); }
+      const fieldName = f.name.replace(/_t$/, "_s");
+      if (cb.checked) { if (!displayState.flPicked.includes(fieldName)) displayState.flPicked.push(fieldName); }
       else { displayState.flPicked = displayState.flPicked.filter(n => n !== f.name); }
       updatePreview();
     };
