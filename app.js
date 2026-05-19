@@ -481,29 +481,6 @@ themeBtn.onclick = () => {
   document.getElementById("q-text-input").oninput  = e => { qText  = e.target.value; updatePreview(); };
   document.getElementById("q-scope-select").onchange = e => { qScope = e.target.value; updatePreview(); };
 
-  // Bloc 2 — domaine disciplinaire
-  document.getElementById("domain-l0").onchange = e => {
-    domainFilter.l0 = e.target.value;
-    domainFilter.l1 = "";
-    renderDomainFilter();
-    updatePreview();
-  };
-  document.getElementById("domain-l1").onchange = e => {
-    domainFilter.l1 = e.target.value;
-    domainFilter.l2 = "";
-    renderDomainFilter();
-    updatePreview();
-  };
-  document.getElementById("domain-l2").onchange = e => {
-    domainFilter.l2 = e.target.value;
-    updatePreview();
-  };
-  document.getElementById("domain-clear").onclick = () => {
-    domainFilter = { l0: "", l1: "", l2: "" };
-    renderDomainFilter();
-    updatePreview();
-  };
-
   // Bloc 2 — ajouter un filtre
   document.getElementById("add-fq-btn").onclick = () => { fqGroups.push(createGroup("AND")); render(); };
 
