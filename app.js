@@ -250,7 +250,7 @@ function renderRule(rule) {
   const row = el("div", "rule");
 
   const fieldSel = el("select", "rule__select rule__field");
-  FIELDS.forEach(f => {
+  [...FIELDS].sort((a, b) => a.label.localeCompare(b.label)).forEach(f => {
     const opt = document.createElement("option");
     opt.value = f.name; opt.textContent = f.label;
     if (f.name === rule.field) opt.selected = true;
