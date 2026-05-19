@@ -158,6 +158,7 @@ const FIELDS = [
   { name: "isbn_s",       label: "ISBN", type: "_s"     },
   { name: "issue_s",       label: "Volume", type: "_s"     },
   { name: "journalIssn_s",       label: "ISSN", type: "_s"     },
+  { name: "title_t", label: "Titre", type: "_t" },
 ];
   
 
