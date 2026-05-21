@@ -159,10 +159,11 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 .rule__select:focus { border-color: var(--accent); }
 .rule__field { min-width: 155px; }
 .rule__operator { min-width: 120px; }
-.rule__input { font-family: var(--mono); font-size: .8rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 5px 9px; min-width: 130px; outline: none; transition: border-color .12s, box-shadow .12s; }
+.rule__input { font-family: var(--mono); font-size: .8rem; color: var(--accent); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 5px 9px; min-width: 130px; outline: none; transition: border-color .12s, box-shadow .12s; }
 .rule__input::placeholder { color: var(--text-dim); }
 .rule__input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
 .rule__input--date { min-width: 148px; color-scheme: dark; }
+body.light .rule__input--date { color-scheme: light; }
 .rule__input--number { min-width: 90px; }
 .rule__sep { font-size: .72rem; color: var(--text-muted); font-family: var(--mono); }
 .rule__delete { margin-left: auto; }
