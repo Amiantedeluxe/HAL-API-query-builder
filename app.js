@@ -113,12 +113,12 @@ function renderFlCheckboxes() {
     cb.onchange = () => {
       const fieldName = f.name.replace(/_t$/, "_s");
       if (cb.checked) { if (!displayState.flPicked.includes(fieldName)) displayState.flPicked.push(fieldName); }
-      else { displayState.flPicked = displayState.flPicked.filter(n => n !== f.name); }
+      else { displayState.flPicked = displayState.flPicked.filter(n => n !== fieldName); }
       updatePreview();
     };
     label.appendChild(cb);
     label.appendChild(document.createTextNode(" " + f.label));
-    const tech = el("span", "fl-field-tech"); tech.textContent = f.name;
+    const tech = el("span", "fl-field-tech"); tech.textContent = f.name.replace(/_t$/, "_s");
     label.appendChild(tech);
     grid.appendChild(label);
   });
