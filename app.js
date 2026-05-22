@@ -147,7 +147,8 @@ function renderSortFieldSelect() {
   fieldNames.forEach(name => {
     const opt = document.createElement("option");
     opt.value = name;
-    opt.textContent = name;
+    const fieldDef = FIELDS.find(f => f.name.replace(/_t$/, "_s") === name || f.name === name);
+    opt.textContent = fieldDef ? `${fieldDef.label}` : name;
     select.appendChild(opt);
   });
 
