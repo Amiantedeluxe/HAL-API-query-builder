@@ -99,6 +99,8 @@ function renderDisplaySection() {
     rowsInput.value    = displayState.rows;
     rowsInput.disabled = false;
   }
+
+  renderSortFieldSelect();
 }
 
 function renderFlCheckboxes() {
@@ -114,6 +116,7 @@ function renderFlCheckboxes() {
       const fieldName = f.name.replace(/_t$/, "_s");
       if (cb.checked) { if (!displayState.flPicked.includes(fieldName)) displayState.flPicked.push(fieldName); }
       else { displayState.flPicked = displayState.flPicked.filter(n => n !== fieldName); }
+      renderSortFieldSelect();
       updatePreview();
     };
     label.appendChild(cb);
@@ -122,6 +125,39 @@ function renderFlCheckboxes() {
     label.appendChild(tech);
     grid.appendChild(label);
   });
+}
+
+function renderSortFieldSelect() {
+  const DEFAULT_FL_FIELDS = ["docid", "label_s", "uri_s"];
+
+  let fieldNames = [];
+  if (displayState.flMode === "default") {
+    fieldNames = DEFAULT_FL_FIELDS;
+  } else if (displayState.flMode === "pick") {
+    fieldNames = displayState.flPicked.map(f => f.replace(/_t$/, "_s"));
+  } else if (displayState.flMode === "all") {
+    fieldNames = FIELDS.map(f => f.name.replace(/_t$/, "_s"));
+  }
+  // flMode === "count" → fieldNames reste []
+
+  const select = document.getElementById("sort-field");
+  const current = displayState.sortField;
+
+  select.innerHTML = `<option value="">— tri par défaut —</option>`;
+  fieldNames.forEach(name => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    select.appendChild(opt);
+  });
+
+  // Réinitialise si la valeur courante n'est plus dans la liste
+  if (fieldNames.includes(current)) {
+    select.value = current;
+  } else {
+    select.value = "";
+    displayState.sortField = "";
+  }
 }
 
 // ─── Rendu groupes / règles ───────────────────────────────────────────────────
@@ -517,7 +553,10 @@ document.getElementById("rows-input").addEventListener("input", e => {
   bind("start-input",   "start");
   bind("wt-select",     "wt");
   bind("indent-check",  "indent");
-  bind("sort-field",    "sortField");
+  document.getElementById("sort-field").addEventListener("change", e => {
+    displayState.sortField = e.target.value;
+    updatePreview();
+  });
   bind("sort-dir",      "sortDir");
 
   // Facettes

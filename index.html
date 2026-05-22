@@ -207,7 +207,7 @@
             <div class="display-field">
               <label>Trier par <code class="field-code">(sort)</code></label>
               <div class="sort-row">
-                <input id="sort-field" type="text" placeholder="ex: publicationDate_tdate" list="field-suggestions" />
+                <select id="sort-field"></select>
                 <select id="sort-dir">
                   <option value="desc">↓ Déc. </option>
                   <option value="asc">↑ Crois. </option>
@@ -255,11 +255,6 @@
   </div>
 
 </div>
-
-<datalist id="field-suggestions">
-  <option value="authFullName_s"><option value="publicationDate_tdate">
-  <option value="publicationDateY_i"><option value="submittedDate_tdate"><option value="score">
-</datalist>
 
 <script src="domains.js"></script>
 <script src="fields.js"></script>
