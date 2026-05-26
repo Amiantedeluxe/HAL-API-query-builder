@@ -53,7 +53,7 @@ function serializeRule(rule) {
   if (type === "_tdate") {
     const d  = toHALDate(v);
     const d2 = v2 ? toHALDate(v2) : "*";
-    if (rule.operator === "eq")           return `${name}:${d}`;
+    if (rule.operator === "eq")           return `${name}:"${d}"`;
     if (rule.operator === "before")       return `${name}:[* TO ${d}]`;
     if (rule.operator === "after")        return `${name}:[${d} TO *]`;
     if (rule.operator === "date_between") return `${name}:[${d} TO ${d2}]`;
