@@ -110,10 +110,10 @@ function renderFlCheckboxes() {
     const label = el("label", "fl-checkbox-label");
     const cb    = document.createElement("input");
     cb.type    = "checkbox";
-    cb.value   = f.name.replace(/_t$/, "_s");
-    cb.checked = displayState.flPicked.includes(f.name.replace(/_t$/, "_s"));
+    cb.value   = f.name.replace(/(_t|_id)$/, '_s');
+    cb.checked = displayState.flPicked.includes(f.name.replace(/(_t|_id)$/, '_s'));
     cb.onchange = () => {
-      const fieldName = f.name.replace(/_t$/, "_s");
+      const fieldName = f.name.replace(/(_t|_id)$/, '_s');
       if (cb.checked) { if (!displayState.flPicked.includes(fieldName)) displayState.flPicked.push(fieldName); }
       else { displayState.flPicked = displayState.flPicked.filter(n => n !== fieldName); }
       renderSortFieldSelect();
@@ -121,7 +121,7 @@ function renderFlCheckboxes() {
     };
     label.appendChild(cb);
     label.appendChild(document.createTextNode(" " + f.label));
-    const tech = el("span", "fl-field-tech"); tech.textContent = f.name.replace(/_t$/, "_s");
+    const tech = el("span", "fl-field-tech"); tech.textContent = f.name.replace(/(_t|_id)$/, '_s');
     label.appendChild(tech);
     grid.appendChild(label);
   });
@@ -134,9 +134,9 @@ function renderSortFieldSelect() {
   if (displayState.flMode === "default") {
     fieldNames = DEFAULT_FL_FIELDS;
   } else if (displayState.flMode === "pick") {
-    fieldNames = displayState.flPicked.map(f => f.replace(/_t$/, "_s"));
+    fieldNames = displayState.flPicked.map(f => f.replace(/(_t|_id)$/, '_s'));
   } else if (displayState.flMode === "all") {
-    fieldNames = FIELDS.map(f => f.name.replace(/_t$/, "_s"));
+    fieldNames = FIELDS.map(f => f.name.replace(/(_t|_id)$/, '_s'));
   }
   // flMode === "count" → fieldNames reste []
 
@@ -147,7 +147,7 @@ function renderSortFieldSelect() {
   fieldNames.forEach(name => {
     const opt = document.createElement("option");
     opt.value = name;
-    const fieldDef = FIELDS.find(f => f.name.replace(/_t$/, "_s") === name || f.name === name);
+    const fieldDef = FIELDS.find(f => f.name.replace(/(_t|_id)$/, '_s') === name || f.name === name);
     opt.textContent = fieldDef ? `${fieldDef.label}` : name;
     select.appendChild(opt);
   });
@@ -482,12 +482,12 @@ function renderFacetList() {
     select.appendChild(blank);
     [...FIELDS].sort((a, b) => a.label.localeCompare(b.label)).forEach(f => {
       const opt = document.createElement("option");
-      opt.value   = f.name.replace(/_t$/, "_s");
+      opt.value   = f.name.replace(/(_t|_id)$/, '_s');
       opt.textContent = f.label;
-      if (f.name.replace(/_t$/, "_s") === val) opt.selected = true;
+      if (f.name.replace(/(_t|_id)$/, '_s') === val) opt.selected = true;
       select.appendChild(opt);
     });
-    select.onchange = () => { displayState.facetFields[idx] = select.value.replace(/_t$/, "_s"); updatePreview(); };
+    select.onchange = () => { displayState.facetFields[idx] = select.value.replace(/(_t|_id)$/, '_s'); updatePreview(); };
     row.appendChild(select);
 
     const del = iconBtn("×", "btn btn--ghost btn--icon", "Supprimer");
