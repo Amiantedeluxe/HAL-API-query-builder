@@ -114,13 +114,19 @@ function buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets, domainFqS
     parts.push(`fl=${encodeURIComponent(params.fl.trim())}`);
   }
 
-  const activeFacets = (facets.fields || []).filter(f => f.trim());
-  if (activeFacets.length > 0) {
-    parts.push("facet=true");
-    activeFacets.forEach(f => parts.push(`facet.field=${encodeURIComponent(f.trim())}`));
-    if (facets.sort)  parts.push(`facet.sort=${facets.sort}`);
-    if (facets.limit) parts.push(`facet.limit=${facets.limit}`);
-  }
+const activeFacets = (facets.fields || []).filter(f => f.trim());
+const activePivots = (facets.pivots || []).filter(p => p.filter(f => f.trim()).length >= 2);
+
+if (activeFacets.length > 0 || activePivots.length > 0) {
+  parts.push("facet=true");
+  activeFacets.forEach(f => parts.push(`facet.field=${encodeURIComponent(f.trim())}`));
+  activePivots.forEach(p => {
+    const fields = p.filter(f => f.trim()).join(",");
+    parts.push(`facet.pivot=${encodeURIComponent(fields)}`);
+  });
+  if (facets.sort)  parts.push(`facet.sort=${facets.sort}`);
+  if (facets.limit) parts.push(`facet.limit=${facets.limit}`);
+}
 
   const base = baseUrl.trim().replace(/\/$/, "");
   return `${base}/?${parts.join("&")}`;
@@ -149,12 +155,18 @@ function buildHALUrlReadable(baseUrl, qText, qScope, fqGroups, params, facets, d
   }
 
   const activeFacets = (facets.fields || []).filter(f => f.trim());
-  if (activeFacets.length > 0) {
-    parts.push("facet=true");
-    activeFacets.forEach(f => parts.push(`facet.field=${f.trim()}`));
-    if (facets.sort)  parts.push(`facet.sort=${facets.sort}`);
-    if (facets.limit) parts.push(`facet.limit=${facets.limit}`);
-  }
+const activePivots = (facets.pivots || []).filter(p => p.filter(f => f.trim()).length >= 2);
+
+if (activeFacets.length > 0 || activePivots.length > 0) {
+  parts.push("facet=true");
+  activeFacets.forEach(f => parts.push(`facet.field=${f.trim()}`));
+  activePivots.forEach(p => {
+    const fields = p.filter(f => f.trim()).join(",");
+    parts.push(`facet.pivot=${fields}`);
+  });
+  if (facets.sort)  parts.push(`facet.sort=${facets.sort}`);
+  if (facets.limit) parts.push(`facet.limit=${facets.limit}`);
+}
 
   const base = baseUrl.trim().replace(/\/$/, "");
   return `${base}/?\n  ${parts.join("\n  &")}`;
