@@ -39,6 +39,7 @@ let displayState = {
   facetFields: [],
   facetSort:   "",
   facetLimit:  "",
+  facetPivots: [],
 };
 
 // Mode document unique
@@ -101,6 +102,8 @@ function renderDisplaySection() {
   }
 
   renderSortFieldSelect();
+  renderPivotList();
+  renderFacetList();
 }
 
 function renderFlCheckboxes() {
@@ -399,7 +402,7 @@ function updatePreview() {
       sortDir:   displayState.sortDir,
       fl:        buildFl(),
     };
-    const facets = { fields: displayState.facetFields, sort: displayState.facetSort, limit: displayState.facetLimit };
+    const facets = { fields: displayState.facetFields, pivots: displayState.facetPivots, sort: displayState.facetSort, limit: displayState.facetLimit };
     readable = buildHALUrlReadable(baseUrl, qText, qScope, fqGroups, params, facets);
     encoded  = buildHALUrl(baseUrl, qText, qScope, fqGroups, params, facets);
   }
@@ -418,7 +421,7 @@ function buildFl() {
 
 function copyUrl() {
   const params = { rows: displayState.countOnly ? "0" : displayState.rows, wt: displayState.wt, indent: displayState.indent, start: displayState.start, sortField: displayState.sortField, sortDir: displayState.sortDir, fl: buildFl() };
-  const facets = { fields: displayState.facetFields, sort: displayState.facetSort, limit: displayState.facetLimit };
+  const facets = { fields: displayState.facetFields, pivots: displayState.facetPivots, sort: displayState.facetSort, limit: displayState.facetLimit };
   let url;
   if (appMode === "doc") {
     const id = docId.trim();
@@ -441,7 +444,7 @@ function resetAll() {
   qText        = ""; qScope = "all";
   fqGroups     = [];
   domainFilter = { l0: "", l1: "", l2: "" };
-  displayState = { flMode: "default", flPicked: [], rows: "30", countOnly: false, start: "0", wt: "json", indent: true, sortField: "", sortDir: "desc", facetFields: [], facetSort: "", facetLimit: "" };
+  displayState = { flMode: "default", flPicked: [], rows: "30", countOnly: false, start: "0", wt: "json", indent: true, sortField: "", sortDir: "desc", facetFields: [], facetSort: "", facetLimit: "", facetPivots: [] };
   docId        = "";
 
   document.getElementById("mode-search").checked   = true;
@@ -471,23 +474,30 @@ function removeNodeFrom(group, id) {
 }
 
 function renderFacetList() {
-  const list = document.getElementById("facet-fields-list");
+  const list  = document.getElementById("facet-fields-list");
+  const empty = document.getElementById("facet-simple-empty");
   list.innerHTML = "";
+  if (displayState.facetFields.length === 0) {
+    empty.style.display = "flex";
+    return;
+  }
+  empty.style.display = "none";
   displayState.facetFields.forEach((val, idx) => {
-    const row   = el("div", "facet-row");
-
+    const row = el("div", "facet-row");
+    const label = el("span", "facet-row__label"); label.textContent = "Compter par";
+    row.appendChild(label);
     const select = el("select", "rule__select");
     const blank  = document.createElement("option");
     blank.value = ""; blank.textContent = "— choisir un champ —";
     select.appendChild(blank);
     [...FIELDS].sort((a, b) => a.label.localeCompare(b.label)).forEach(f => {
       const opt = document.createElement("option");
-      opt.value   = f.name.replace(/(_t|_id)$/, '_s');
+      opt.value       = f.name.replace(/(_t|_id)$/, "_s");
       opt.textContent = f.label;
-      if (f.name.replace(/(_t|_id)$/, '_s') === val) opt.selected = true;
+      if (f.name.replace(/(_t|_id)$/, "_s") === val) opt.selected = true;
       select.appendChild(opt);
     });
-    select.onchange = () => { displayState.facetFields[idx] = select.value.replace(/(_t|_id)$/, '_s'); updatePreview(); };
+    select.onchange = () => { displayState.facetFields[idx] = select.value; updatePreview(); };
     row.appendChild(select);
 
     const del = iconBtn("×", "btn btn--ghost btn--icon", "Supprimer");
@@ -495,6 +505,59 @@ function renderFacetList() {
     row.appendChild(del);
 
     list.appendChild(row);
+  });
+}
+
+function renderPivotList() {
+  const list  = document.getElementById("facet-pivot-list");
+  const empty = document.getElementById("facet-pivot-empty");
+  list.innerHTML = "";
+  if (displayState.facetPivots.length === 0) {
+    empty.style.display = "flex";
+    return;
+  }
+  empty.style.display = "none";
+  displayState.facetPivots.forEach((pivot, pivotIdx) => {
+    const wrap = el("div", "pivot-wrap");
+    pivot.forEach((val, levelIdx) => {
+      const row = el("div", "facet-row pivot-level");
+      row.style.paddingLeft = `${levelIdx * 20}px`;
+      const label = el("span", "facet-row__label");
+      label.textContent = levelIdx === 0 ? "Compter par" : "└ puis par";
+      row.appendChild(label);
+      const select = el("select", "rule__select");
+      const blank  = document.createElement("option");
+      blank.value = ""; blank.textContent = "— choisir un champ —";
+      select.appendChild(blank);
+      [...FIELDS].sort((a, b) => a.label.localeCompare(b.label)).forEach(f => {
+        const opt = document.createElement("option");
+        opt.value       = f.name.replace(/(_t|_id)$/, "_s");
+        opt.textContent = f.label;
+        if (f.name.replace(/(_t|_id)$/, "_s") === val) opt.selected = true;
+        select.appendChild(opt);
+      });
+      select.onchange = () => { displayState.facetPivots[pivotIdx][levelIdx] = select.value; updatePreview(); };
+      row.appendChild(select);
+      const del = iconBtn("×", "btn btn--ghost btn--icon", "Supprimer");
+      del.onclick = () => {
+        // Supprime ce niveau et tous ceux en dessous
+        displayState.facetPivots[pivotIdx].splice(levelIdx);
+        // Si plus assez de niveaux, supprime le pivot entier
+        if (displayState.facetPivots[pivotIdx].length < 2) {
+          displayState.facetPivots.splice(pivotIdx, 1);
+        }
+        renderPivotList(); updatePreview();
+      };
+      row.appendChild(del);
+      wrap.appendChild(row);
+    });
+    // Bouton + niveau
+    const addLevel = el("button", "btn btn--outline btn--sm pivot-add-level");
+    addLevel.style.marginLeft = `${pivot.length * 20}px`;
+    addLevel.textContent = "+ Ajouter un niveau";
+    addLevel.onclick = () => { displayState.facetPivots[pivotIdx].push(""); renderPivotList(); updatePreview(); };
+    wrap.appendChild(addLevel);
+    list.appendChild(wrap);
   });
 }
 
@@ -563,6 +626,11 @@ document.getElementById("rows-input").addEventListener("input", e => {
   // Facettes
   document.getElementById("add-facet-btn").onclick = () => {
     displayState.facetFields.push(""); renderFacetList(); updatePreview();
+  };
+  document.getElementById("add-pivot-btn").onclick = () => {
+  displayState.facetPivots.push(["", ""]);
+  renderPivotList();
+  updatePreview();
   };
   document.getElementById("facet-sort").onchange = e  => { displayState.facetSort  = e.target.value; updatePreview(); };
   document.getElementById("facet-limit").oninput = e  => { displayState.facetLimit = e.target.value; updatePreview(); };
