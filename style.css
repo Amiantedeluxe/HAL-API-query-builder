@@ -137,9 +137,9 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 .q-hint { margin-top: 8px; font-size: .73rem; color: var(--text-dim); font-family: var(--mono); }
 
 /* ── Bloc 2 : fq ── */
-.fq-empty { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px dashed var(--border-2); border-radius: var(--radius); color: var(--text-muted); font-size: .78rem; margin-bottom: 10px }
+.fq-empty { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px dashed var(--border-2); border-radius: var(--radius); color: var(--text-muted); font-size: .78rem; }
 .fq-list { display: flex; flex-direction: column; gap: 10px; }
-.fq-list:not(:empty) { margin-bottom: 10px; }
+#add-fq-btn { margin-top: 8px; margin-bottom: 8px; }
 
 /* ── Groups ── */
 .group { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-lg); }
@@ -193,6 +193,9 @@ body.light .rule__input--date { color-scheme: light; }
 .facet-opt { min-width: 140px; }
 .facet-subsection-title { font-size: .78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
 .facet-simple-empty { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px dashed var(--border-2); border-radius: var(--radius); color: var(--text-muted); font-size: .78rem; margin-bottom: 10px; }
+#add-pivot-btn { margin-top: 8px; margin-bottom: 8px; }
+.pivot-add-level { margin-top: 8px; }
+.facet-row__label { font-family: var(--mono); font-size: .68rem; color: var(--text); }
 
 /* ── Colonne droite : paramètres de sortie ── */
 .display-params { display: flex; flex-direction: column; gap: 12px; }
