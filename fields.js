@@ -94,7 +94,7 @@ const FIELDS = [
     { value: "DMP", label: "Plan de gestion de données" },
     { value: "DICTIONARY", label: "Dictionnaire" },
   ]    },
-  { name: "domain",       label: "Discipline",    type: "_domain"},
+  { name: "domain_s",       label: "Discipline",    type: "_domain"},
   { name: "submitType_s",         label: "Type de dépôt",  type: "_s", options: [ 
     { value: "file", label: "avec fichier" },
     { value: "notice", label: "notice" },
