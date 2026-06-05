@@ -192,6 +192,7 @@ body.light .rule__input--date { color-scheme: light; }
 .facet-options-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .facet-opt { min-width: 140px; }
 .facet-subsection-title { font-size: .78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+.facet-simple-empty { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px dashed var(--border-2); border-radius: var(--radius); color: var(--text-muted); font-size: .78rem; margin-bottom: 10px; }
 
 /* ── Colonne droite : paramètres de sortie ── */
 .display-params { display: flex; flex-direction: column; gap: 12px; }
