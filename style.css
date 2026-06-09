@@ -184,7 +184,7 @@ body.light .rule__input--date { color-scheme: light; }
 
 .facet-section { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
 .facet-header { display: flex; align-items: center; justify-content: space-between; }
-.facet-label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text); align-items: center;}
+.facet-label { font-size: .82rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text); align-items: center;}
 .facet-fields-list { display: flex; flex-direction: column; margin-bottom: 0; }
 #add-facet-btn { margin-top: 8px; margin-bottom: 8px; }
 .facet-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
