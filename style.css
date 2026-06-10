@@ -203,11 +203,12 @@ body.light .rule__input--date { color-scheme: light; }
 #facet-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; margin-bottom: 4px; }
 .facet-simple-row { display: flex; align-items: center; gap: 8px; }
 .facet-simple { display: flex; align-items: center; gap: 8px; }
-.facet-tag { font-family: var(--mono); font-size: .68rem; color: var(--text-muted); white-space: nowrap; }
+.facet-tag { font-family: var(--sans); font-size: .68rem; color: var(--text-muted); white-space: nowrap; font-weight: 800; }
 .facet-select { font-family: var(--sans); font-size: .8rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px 24px 4px 8px; outline: none; transition: border-color .12s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236e7a9e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 7px center; }
 .facet-select:focus { border-color: var(--accent); }
 .facet-del { background: transparent; border: none; color: var(--text-dim); cursor: pointer; font-size: .9rem; padding: 2px 5px; border-radius: var(--radius); }
 .facet-del:hover { color: var(--red); background: rgba(255,107,107,.1); }
+.facet-tag-wrap { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
 
 .facet-pivot { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 .pivot-header { display: flex; align-items: center; gap: 8px; padding: 5px 10px; background: var(--surface-2); border-bottom: 1px solid var(--border); }

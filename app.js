@@ -483,8 +483,12 @@ function renderFacetSection() {
 
 // Facettes simples
 if (displayState.facetFields.length > 0) {
-  const tag = el("span", "facet-tag"); tag.textContent = "compter par";
-  list.appendChild(tag);
+const tagWrap = el("div", "facet-tag-wrap");
+const tag = el("span", "facet-tag"); tag.textContent = "Compter par";
+const code = el("code", "field-code"); code.textContent = "(facet.field)";
+tagWrap.appendChild(tag);
+tagWrap.appendChild(code);
+list.appendChild(tagWrap);
 
   displayState.facetFields.forEach((val, idx) => {
     const row = el("div", "facet-simple");
