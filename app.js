@@ -465,6 +465,15 @@ function resetAll() {
 
 // ─── Utilitaires DOM ──────────────────────────────────────────────────────────
 
+function makeBadge(label, code) {
+  const badge = el("div", "pivot-badge");
+  const badgeLabel = el("span", "pivot-badge__label"); badgeLabel.textContent = label;
+  const badgeCode = el("code", "pivot-badge__code field-code"); badgeCode.textContent = code;
+  badge.appendChild(badgeLabel);
+  badge.appendChild(badgeCode);
+  return badge;
+}
+
 function el(tag, cls) { const e = document.createElement(tag); if (cls) e.className = cls; return e; }
 function iconBtn(label, cls, title) { const b = el("button", cls); b.textContent = label; b.title = title; return b; }
 function removeNodeFrom(group, id) {
@@ -483,12 +492,19 @@ function renderFacetSection() {
 
 // Facettes simples
 if (displayState.facetFields.length > 0) {
-const tagWrap = el("div", "facet-tag-wrap");
-const tag = el("span", "facet-tag"); tag.textContent = "Compter par";
-const code = el("code", "field-code"); code.textContent = "(facet.field)";
-tagWrap.appendChild(tag);
-tagWrap.appendChild(code);
-list.appendChild(tagWrap);
+  const wrap = el("div", "facet-pivot"); // même style de bloc que les pivots
+
+  const header = el("div", "pivot-header");
+header.appendChild(makeBadge("Facettes simples", "(facet.field)"));
+  const delAll = iconBtn("×", "facet-del", "Supprimer toutes les facettes simples");
+delAll.onclick = () => { displayState.facetFields = []; renderFacetSection(); updatePreview(); };
+header.appendChild(delAll);
+  wrap.appendChild(header);
+
+  const body = el("div", "pivot-body");
+
+  const tag = el("span", "facet-tag"); tag.textContent = "Compter par";
+  body.appendChild(tag);
 
   displayState.facetFields.forEach((val, idx) => {
     const row = el("div", "facet-simple");
@@ -511,16 +527,20 @@ list.appendChild(tagWrap);
 
     row.appendChild(select);
     row.appendChild(del);
-    list.appendChild(row);
+    body.appendChild(row);
   });
+
+  wrap.appendChild(body);
+  list.appendChild(wrap);
 }
 
   // Facettes croisées
   displayState.facetPivots.forEach((pivot, pivotIdx) => {
     const wrap = el("div", "facet-pivot");
 
-    const header = el("div", "pivot-header");
-    const badge = el("span", "facet-tag-code pivot-badge"); badge.textContent = "facet.pivot";
+  const header = el("div", "pivot-header");
+  const badge = makeBadge("Facettes croisées", "(facet.pivot)");
+  header.appendChild(badge);
     const spacer = el("div", ""); spacer.style.flex = "1";
     const delAll = iconBtn("×", "facet-del", "Supprimer ce croisement");
     delAll.onclick = () => { displayState.facetPivots.splice(pivotIdx, 1); renderFacetSection(); updatePreview(); };
