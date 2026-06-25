@@ -102,8 +102,7 @@ function renderDisplaySection() {
   }
 
   renderSortFieldSelect();
-  renderPivotList();
-  renderFacetList();
+renderFacetSection();
 }
 
 function renderFlCheckboxes() {
@@ -473,90 +472,99 @@ function removeNodeFrom(group, id) {
   group.children.forEach(c => { if (c.type === "group") removeNodeFrom(c, id); });
 }
 
-function renderFacetList() {
-  const list  = document.getElementById("facet-fields-list");
-  const empty = document.getElementById("facet-simple-empty");
+function renderFacetSection() {
+  const list  = document.getElementById("facet-list");
+  const empty = document.getElementById("facet-empty");
   list.innerHTML = "";
-  if (displayState.facetFields.length === 0) {
-    empty.style.display = "flex";
-    return;
-  }
-  empty.style.display = "none";
+  list.appendChild(empty);
+
+  const hasItems = displayState.facetFields.length > 0 || displayState.facetPivots.length > 0;
+  empty.style.display = hasItems ? "none" : "flex";
+
+// Facettes simples
+if (displayState.facetFields.length > 0) {
+const tagWrap = el("div", "facet-tag-wrap");
+const tag = el("span", "facet-tag"); tag.textContent = "Compter par";
+const code = el("code", "field-code"); code.textContent = "(facet.field)";
+tagWrap.appendChild(tag);
+tagWrap.appendChild(code);
+list.appendChild(tagWrap);
+
   displayState.facetFields.forEach((val, idx) => {
-    const row = el("div", "facet-row");
-    const label = el("span", "facet-row__label"); label.textContent = "Compter par";
-    row.appendChild(label);
-    const select = el("select", "rule__select");
-    const blank  = document.createElement("option");
+    const row = el("div", "facet-simple");
+
+    const select = el("select", "facet-select");
+    const blank = document.createElement("option");
     blank.value = ""; blank.textContent = "— choisir un champ —";
     select.appendChild(blank);
     [...FIELDS].sort((a, b) => a.label.localeCompare(b.label)).forEach(f => {
       const opt = document.createElement("option");
-      opt.value       = f.name.replace(/(_t|_id)$/, "_s");
+      opt.value = f.name.replace(/(_t|_id)$/, "_s");
       opt.textContent = f.label;
       if (f.name.replace(/(_t|_id)$/, "_s") === val) opt.selected = true;
       select.appendChild(opt);
     });
     select.onchange = () => { displayState.facetFields[idx] = select.value; updatePreview(); };
+
+    const del = iconBtn("×", "facet-del", "Supprimer");
+    del.onclick = () => { displayState.facetFields.splice(idx, 1); renderFacetSection(); updatePreview(); };
+
     row.appendChild(select);
-
-    const del = iconBtn("×", "btn btn--ghost btn--icon", "Supprimer");
-    del.onclick = () => { displayState.facetFields.splice(idx, 1); renderFacetList(); updatePreview(); };
     row.appendChild(del);
-
     list.appendChild(row);
   });
 }
 
-function renderPivotList() {
-  const list  = document.getElementById("facet-pivot-list");
-  const empty = document.getElementById("facet-pivot-empty");
-  list.innerHTML = "";
-  if (displayState.facetPivots.length === 0) {
-    empty.style.display = "flex";
-    return;
-  }
-  empty.style.display = "none";
+  // Facettes croisées
   displayState.facetPivots.forEach((pivot, pivotIdx) => {
-    const wrap = el("div", "pivot-wrap");
+    const wrap = el("div", "facet-pivot");
+
+    const header = el("div", "pivot-header");
+    const badge = el("span", "facet-tag-code pivot-badge"); badge.textContent = "facet.pivot";
+    const spacer = el("div", ""); spacer.style.flex = "1";
+    const delAll = iconBtn("×", "facet-del", "Supprimer ce croisement");
+    delAll.onclick = () => { displayState.facetPivots.splice(pivotIdx, 1); renderFacetSection(); updatePreview(); };
+    header.appendChild(badge); header.appendChild(spacer); header.appendChild(delAll);
+
+    const body = el("div", "pivot-body");
+
     pivot.forEach((val, levelIdx) => {
-      const row = el("div", "facet-row pivot-level");
-      row.style.paddingLeft = `${levelIdx * 20}px`;
-      const label = el("span", "facet-row__label");
-      label.textContent = levelIdx === 0 ? "Compter par" : "└ puis par";
-      row.appendChild(label);
-      const select = el("select", "rule__select");
-      const blank  = document.createElement("option");
+      const lvl = el("div", "pivot-level");
+      const tag = el("span", "pivot-level-tag");
+      tag.textContent = levelIdx === 0 ? "compter par" : "└ puis par";
+
+      const select = el("select", "pivot-level-select");
+      const blank = document.createElement("option");
       blank.value = ""; blank.textContent = "— choisir un champ —";
       select.appendChild(blank);
       [...FIELDS].sort((a, b) => a.label.localeCompare(b.label)).forEach(f => {
         const opt = document.createElement("option");
-        opt.value       = f.name.replace(/(_t|_id)$/, "_s");
+        opt.value = f.name.replace(/(_t|_id)$/, "_s");
         opt.textContent = f.label;
         if (f.name.replace(/(_t|_id)$/, "_s") === val) opt.selected = true;
         select.appendChild(opt);
       });
       select.onchange = () => { displayState.facetPivots[pivotIdx][levelIdx] = select.value; updatePreview(); };
-      row.appendChild(select);
-      const del = iconBtn("×", "btn btn--ghost btn--icon", "Supprimer");
+
+      const del = iconBtn("×", "pivot-level-del", "Supprimer ce niveau et les suivants");
       del.onclick = () => {
-        // Supprime ce niveau et tous ceux en dessous
         displayState.facetPivots[pivotIdx].splice(levelIdx);
-        // Si plus assez de niveaux, supprime le pivot entier
         if (displayState.facetPivots[pivotIdx].length < 2) {
           displayState.facetPivots.splice(pivotIdx, 1);
         }
-        renderPivotList(); updatePreview();
+        renderFacetSection(); updatePreview();
       };
-      row.appendChild(del);
-      wrap.appendChild(row);
+
+      lvl.appendChild(tag); lvl.appendChild(select); lvl.appendChild(del);
+      body.appendChild(lvl);
     });
-    // Bouton + niveau
-    const addLevel = el("button", "btn btn--outline btn--sm pivot-add-level");
-    addLevel.style.marginLeft = `${pivot.length * 20}px`;
-    addLevel.textContent = "+ Ajouter un niveau";
-    addLevel.onclick = () => { displayState.facetPivots[pivotIdx].push(""); renderPivotList(); updatePreview(); };
-    wrap.appendChild(addLevel);
+
+    const addLevel = el("button", "btn btn--ghost btn--sm pivot-add-level");
+    addLevel.textContent = "+ ajouter un niveau";
+    addLevel.onclick = () => { displayState.facetPivots[pivotIdx].push(""); renderFacetSection(); updatePreview(); };
+    body.appendChild(addLevel);
+
+    wrap.appendChild(header); wrap.appendChild(body);
     list.appendChild(wrap);
   });
 }
@@ -625,11 +633,11 @@ document.getElementById("rows-input").addEventListener("input", e => {
 
   // Facettes
   document.getElementById("add-facet-btn").onclick = () => {
-    displayState.facetFields.push(""); renderFacetList(); updatePreview();
+    displayState.facetFields.push(""); renderFacetSection(); updatePreview();
   };
   document.getElementById("add-pivot-btn").onclick = () => {
   displayState.facetPivots.push(["", ""]);
-  renderPivotList();
+renderFacetSection();
   updatePreview();
   };
   document.getElementById("facet-sort").onchange = e  => { displayState.facetSort  = e.target.value; updatePreview(); };

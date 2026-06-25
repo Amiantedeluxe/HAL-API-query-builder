@@ -197,6 +197,32 @@ body.light .rule__input--date { color-scheme: light; }
 .pivot-add-level { margin-top: 8px; }
 .facet-row__label { font-family: var(--mono); font-size: .68rem; color: var(--text); }
 
+
+/*bloc facettes simples + pivots */
+.facet-actions { display: flex; gap: 8px; margin-top: 8px; margin-bottom: 4px; }
+#facet-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; margin-bottom: 4px; }
+.facet-simple-row { display: flex; align-items: center; gap: 8px; }
+.facet-simple { display: flex; align-items: center; gap: 8px; }
+.facet-tag { font-family: var(--sans); font-size: .68rem; color: var(--text-muted); white-space: nowrap; font-weight: 800; }
+.facet-select { font-family: var(--sans); font-size: .8rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px 24px 4px 8px; outline: none; transition: border-color .12s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236e7a9e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 7px center; }
+.facet-select:focus { border-color: var(--accent); }
+.facet-del { background: transparent; border: none; color: var(--text-dim); cursor: pointer; font-size: .9rem; padding: 2px 5px; border-radius: var(--radius); }
+.facet-del:hover { color: var(--red); background: rgba(255,107,107,.1); }
+.facet-tag-wrap { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+
+.facet-pivot { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.pivot-header { display: flex; align-items: center; gap: 8px; padding: 5px 10px; background: var(--surface-2); border-bottom: 1px solid var(--border); }
+.pivot-badge { font-family: var(--mono); font-size: .65rem; color: var(--accent); flex: 1; }
+.pivot-body { padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; background: var(--surface); }
+.pivot-level { display: flex; align-items: center; gap: 8px; }
+.pivot-level-tag { font-family: var(--mono); font-size: .68rem; color: var(--text-muted); white-space: nowrap; min-width: 76px; }
+.pivot-level-select { font-family: var(--sans); font-size: .8rem; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px 24px 4px 8px; outline: none; transition: border-color .12s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236e7a9e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 7px center; }
+.pivot-level-select:focus { border-color: var(--accent); }
+.pivot-level-del { background: transparent; border: none; color: var(--text-dim); cursor: pointer; font-size: .9rem; padding: 2px 5px; border-radius: var(--radius); }
+.pivot-level-del:hover { color: var(--red); background: rgba(255,107,107,.1); }
+.pivot-add-level { align-self: flex-start; font-size: .72rem; font-family: var(--mono); color: var(--text-muted); background: none; border: none; cursor: pointer; padding: 2px 0; }
+.pivot-add-level:hover { color: var(--accent); }
+
 /* ── Colonne droite : paramètres de sortie ── */
 .display-params { display: flex; flex-direction: column; gap: 12px; }
 .params-row { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
