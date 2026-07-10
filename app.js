@@ -579,7 +579,7 @@ header.appendChild(delAll);
       body.appendChild(lvl);
     });
 
-    const addLevel = el("button", "btn btn--ghost btn--sm pivot-add-level");
+    const addLevel = el("button", "btn btn--outline btn--sm pivot-add-level");
     addLevel.textContent = "+ ajouter un niveau";
     addLevel.onclick = () => { displayState.facetPivots[pivotIdx].push(""); renderFacetSection(); updatePreview(); };
     body.appendChild(addLevel);
