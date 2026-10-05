@@ -207,6 +207,7 @@ const FIELDS = [
   { name: "relatedPublication_s", label: "Publications associées (halId/doi)", type: "_s" },
   { name: "submittedDate_tdate", label: "Date de dépôt", type: "_tdate" },
   { name: "abstract_t", label: "Résumé", type: "_t" },
+  { name: "version_i", label: "Nombre de versions", type: "_i" },
 ];
   
 
