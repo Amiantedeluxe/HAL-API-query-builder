@@ -208,7 +208,7 @@ const FIELDS = [
   { name: "submittedDate_tdate", label: "Date de dépôt", type: "_tdate" },
   { name: "abstract_t", label: "Résumé", type: "_t" },
   { name: "version_i", label: "Nombre de versions", type: "_i" },
-  { name: "contributorFullName_t", label: "Nom du déposant", type: "_t" },
+  { name: "contributorFullName_s", label: "Nom du déposant", type: "_s" },
   { name: "contributorId_i", label: "Déposant (UserID)", type: "_i" },
 ];
   
